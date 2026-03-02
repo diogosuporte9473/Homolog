@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferramentas Gratuitas Cibersegurança LGPD PMEs 2026</title>
+    <meta name="description" content="Baixe checklists, guias e modelos de cibersegurança e LGPD para PMEs brasileiras. Atualizado para 2026-2027 seguindo ANPD e CERT.br.">
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'seguranca-azul': '#1e40af',
+                        'seguranca-verde': '#10b981',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Lucide Icons (via CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e40af 0%, #1e1b4b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23ffffff' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .sticky-nav {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .section-card {
+            transition: transform 0.3s ease;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+
+    <!-- Menu Fixo -->
+    <nav class="sticky top-0 z-50 sticky-nav border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <i data-lucide="shield-check" class="text-seguranca-azul mr-2"></i>
+                    <span class="font-bold text-xl tracking-tight">Guia PMEs 2026</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#checklist-maturidade" class="text-gray-600 hover:text-seguranca-azul px-3 py-2 rounded-md text-sm font-medium">Maturidade</a>
+                        <a href="#plano-continuidade" class="text-gray-600 hover:text-seguranca-azul px-3 py-2 rounded-md text-sm font-medium">Continuidade</a>
+                        <a href="#politica-ia" class="text-gray-600 hover:text-seguranca-azul px-3 py-2 rounded-md text-sm font-medium">Política IA</a>
+                        <a href="#teste-ia-ofensiva" class="text-gray-600 hover:text-seguranca-azul px-3 py-2 rounded-md text-sm font-medium">Teste IA</a>
+                        <a href="#tendencias-2027" class="text-gray-600 hover:text-seguranca-azul px-3 py-2 rounded-md text-sm font-medium">Tendências</a>
+                        <a href="#lgpd-dicas" class="text-gray-600 hover:text-seguranca-azul px-3 py-2 rounded-md text-sm font-medium">LGPD</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <!-- Mobile menu button can be added here if needed -->
+                    <a href="#lead-form" class="bg-seguranca-azul text-white px-4 py-2 rounded-lg text-sm font-bold">Baixar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-gradient text-white py-20 lg:py-32 relative">
+        <div class="hero-pattern"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight" data-aos="fade-up">
+                Ferramentas Gratuitas: Checklists e Guias de <span class="text-seguranca-verde">Cibersegurança + LGPD</span> para PMEs
+            </h1>
+            <p class="text-xl md:text-2xl mb-10 text-blue-100 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                Baixe modelos prontos, checklists de maturidade, políticas de IA e dicas para 2026/2027 – tudo alinhado com CERT.br, ANPD e Brasscom.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
+                <a href="#lead-form" class="bg-seguranca-verde hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all shadow-lg flex items-center justify-center">
+                    <i data-lucide="mail" class="mr-2"></i> Receba Tudo por E-mail
+                </a>
+            </div>
+            
+            <!-- Floating Icons -->
+            <div class="absolute top-10 left-10 opacity-20 hidden lg:block animate-bounce" style="animation-duration: 3s;">
+                <i data-lucide="shield" size="64"></i>
+            </div>
+            <div class="absolute bottom-10 right-10 opacity-20 hidden lg:block animate-pulse">
+                <i data-lucide="lock" size="64"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
+
+        <!-- #checklist-maturidade -->
+        <section id="checklist-maturidade" class="scroll-mt-20" data-aos="fade-up">
+            <div class="flex items-center mb-8">
+                <div class="p-3 bg-blue-100 rounded-lg text-seguranca-azul mr-4">
+                    <i data-lucide="list-checks" size="32"></i>
+                </div>
+                <h2 class="text-3xl font-bold">Checklist de Maturidade em Cibersegurança 2026</h2>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 border-b border-gray-100">
+                            <tr>
+                                <th class="px-6 py-4 font-semibold">Item de Controle</th>
+                                <th class="px-6 py-4 font-semibold text-center">Sim</th>
+                                <th class="px-6 py-4 font-semibold text-center">Parcial</th>
+                                <th class="px-6 py-4 font-semibold text-center">Não</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <!-- 12 Itens -->
+                            <tr><td class="px-6 py-4">1. Autenticação de dois fatores (MFA) em todos os acessos?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">2. Política de backups offline e imutáveis testada?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">3. Inventário de ativos (hardware e software) atualizado?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">4. Treinamento periódico contra Phishing para funcionários?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">5. Gestão de patches e atualizações em menos de 48h?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">6. Monitoramento de logs e acessos suspeitos 24/7?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">7. Criptografia de dados sensíveis em repouso e trânsito?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">8. Plano de Resposta a Incidentes formalizado?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">9. Controle de privilégios mínimos (Least Privilege)?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">10. Proteção de Endpoint (EDR/XDR) moderna?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">11. Revisão de segurança de fornecedores (Third-party)?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                            <tr><td class="px-6 py-4">12. Auditoria de acessos de ex-colaboradores imediata?</td><td class="text-center">◯</td><td class="text-center">◯</td><td class="text-center">◯</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-gray-100 rounded-lg border-l-4 border-seguranca-azul">
+                <p class="text-sm font-semibold mb-2">Exemplo Real:</p>
+                <p class="text-gray-700 italic">"Uma corretora de seguros PME em SP reduziu tentativas de invasão em 85% após implementar o item 1 (MFA) e o item 4 (Treinamento)."</p>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-4 text-sm">
+                <span class="font-bold">Recursos:</span>
+                <a href="https://www.cert.br/docs/seg-adm/" target="_blank" class="text-seguranca-azul hover:underline">CERT.br (Guias)</a>
+                <a href="https://www.anbima.com.br" target="_blank" class="text-seguranca-azul hover:underline">Anbima</a>
+                <a href="https://brasscom.org.br" target="_blank" class="text-seguranca-azul hover:underline">Brasscom</a>
+            </div>
+
+            <div class="mt-10 text-center">
+                <a href="#lead-form" class="text-seguranca-azul font-bold hover:text-blue-800 flex items-center justify-center">
+                    Baixe a versão PDF editável – Deixe seu e-mail abaixo <i data-lucide="chevron-down" class="ml-1"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- #plano-continuidade -->
+        <section id="plano-continuidade" class="scroll-mt-20" data-aos="fade-up">
+            <div class="flex items-center mb-8">
+                <div class="p-3 bg-green-100 rounded-lg text-seguranca-verde mr-4">
+                    <i data-lucide="activity" size="32"></i>
+                </div>
+                <h2 class="text-3xl font-bold">Plano de Continuidade Mínimo para PMEs</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 8 passos -->
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 section-card">
+                    <span class="text-2xl font-bold text-seguranca-verde mb-2 block">01</span>
+                    <h3 class="font-bold mb-2">Identificar Críticos</h3>
+                    <p class="text-sm text-gray-600">Liste o que não pode parar (ex: faturamento, e-mail).</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 section-card">
+                    <span class="text-2xl font-bold text-seguranca-verde mb-2 block">02</span>
+                    <h3 class="font-bold mb-2">Backup Redundante</h3>
+                    <p class="text-sm text-gray-600">Regra 3-2-1: 3 cópias, 2 mídias, 1 fora do local.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 section-card">
+                    <span class="text-2xl font-bold text-seguranca-verde mb-2 block">03</span>
+                    <h3 class="font-bold mb-2">Contatos de Emergência</h3>
+                    <p class="text-sm text-gray-600">Lista física de provedores, TI e jurídico.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 section-card">
+                    <span class="text-2xl font-bold text-seguranca-verde mb-2 block">04</span>
+                    <h3 class="font-bold mb-2">Infra Alternativa</h3>
+                    <p class="text-sm text-gray-600">Acesso via 4G/5G ou local de trabalho remoto.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 section-card">
+                    <span class="text-2xl font-bold text-seguranca-verde mb-2 block">05</span>
+                    <h3 class="font-bold mb-2">Papéis e Responsáveis</h3>
+                    <p class="text-sm text-gray-600">Quem faz o quê durante uma crise.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 section-card">
+                    <span class="text-2xl font-bold text-seguranca-verde mb-2 block">06</span>
+                    <h3 class="font-bold mb-2">Comunicação Externa</h3>
+                    <p class="text-sm text-gray-600">Template de aviso para clientes e fornecedores.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 section-card">
+                    <span class="text-2xl font-bold text-seguranca-verde mb-2 block">07</span>
+                    <h3 class="font-bold mb-2">Restauração de Dados</h3>
+                    <p class="text-sm text-gray-600">Passo a passo para subir backups rapidamente.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 section-card">
+                    <span class="text-2xl font-bold text-seguranca-verde mb-2 block">08</span>
+                    <h3 class="font-bold mb-2">Revisão Pós-Incidente</h3>
+                    <p class="text-sm text-gray-600">Aprenda com as falhas e atualize o plano.</p>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-gray-100 rounded-lg border-l-4 border-seguranca-verde">
+                <p class="text-sm font-semibold mb-2">Exemplo Real:</p>
+                <p class="text-gray-700 italic">"Uma gráfica rápida recuperou 100% das operações em 4h após um ransomware, graças ao plano de redundância em nuvem."</p>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-4 text-sm">
+                <span class="font-bold">Recursos:</span>
+                <a href="https://www.centralserver.com.br/blog/" target="_blank" class="text-seguranca-azul hover:underline">CentralServer</a>
+                <a href="https://pdcati.com.br" target="_blank" class="text-seguranca-azul hover:underline">PDCA TI</a>
+            </div>
+
+            <div class="mt-10 text-center">
+                <a href="#lead-form" class="text-seguranca-verde font-bold hover:text-green-800 flex items-center justify-center">
+                    Baixe a versão PDF editável – Deixe seu e-mail abaixo <i data-lucide="chevron-down" class="ml-1"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- #politica-ia -->
+        <section id="politica-ia" class="scroll-mt-20" data-aos="fade-up">
+            <div class="flex items-center mb-8">
+                <div class="p-3 bg-purple-100 rounded-lg text-purple-600 mr-4">
+                    <i data-lucide="bot" size="32"></i>
+                </div>
+                <h2 class="text-3xl font-bold">Modelo de Política de Uso de IA Generativa</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-green-600 mb-4 flex items-center">
+                        <i data-lucide="check-circle" class="mr-2"></i> Regras Permitidas
+                    </h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><i data-lucide="check" class="text-green-500 mt-1 mr-2 flex-shrink-0" size="16"></i> Revisão de textos públicos e e-mails.</li>
+                        <li class="flex items-start"><i data-lucide="check" class="text-green-500 mt-1 mr-2 flex-shrink-0" size="16"></i> Geração de ideias para marketing.</li>
+                        <li class="flex items-start"><i data-lucide="check" class="text-green-500 mt-1 mr-2 flex-shrink-0" size="16"></i> Auxílio em programação (sem dados sensíveis).</li>
+                        <li class="flex items-start"><i data-lucide="check" class="text-green-500 mt-1 mr-2 flex-shrink-0" size="16"></i> Resumo de documentos de domínio público.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold text-red-600 mb-4 flex items-center">
+                        <i data-lucide="x-circle" class="mr-2"></i> Regras Proibidas
+                    </h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><i data-lucide="x" class="text-red-500 mt-1 mr-2 flex-shrink-0" size="16"></i> Input de dados pessoais de clientes (LGPD).</li>
+                        <li class="flex items-start"><i data-lucide="x" class="text-red-500 mt-1 mr-2 flex-shrink-0" size="16"></i> Upload de segredos industriais ou financeiros.</li>
+                        <li class="flex items-start"><i data-lucide="x" class="text-red-500 mt-1 mr-2 flex-shrink-0" size="16"></i> Uso de IA para decisões contratuais sem revisão humana.</li>
+                        <li class="flex items-start"><i data-lucide="x" class="text-red-500 mt-1 mr-2 flex-shrink-0" size="16"></i> Geração de Deepfakes ou conteúdo ofensivo.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-gray-100 rounded-lg border-l-4 border-purple-600">
+                <p class="text-sm font-semibold mb-2">Consequências:</p>
+                <p class="text-gray-700 italic">"O descumprimento pode levar a advertências formais e riscos de multas pela ANPD devido ao vazamento de dados em chats de IA."</p>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-4 text-sm">
+                <span class="font-bold">Recursos:</span>
+                <a href="https://www.tce.sp.gov.br" target="_blank" class="text-seguranca-azul hover:underline">TCE-SP</a>
+                <a href="https://www.gov.br/governodigital/pt-br/ia" target="_blank" class="text-seguranca-azul hover:underline">Gov.br</a>
+                <a href="https://www.fiesp.com.br" target="_blank" class="text-seguranca-azul hover:underline">Fiesp</a>
+            </div>
+
+            <div class="mt-10 text-center">
+                <a href="#lead-form" class="text-purple-600 font-bold hover:text-purple-800 flex items-center justify-center">
+                    Baixe a versão PDF editável – Deixe seu e-mail abaixo <i data-lucide="chevron-down" class="ml-1"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- #teste-ia-ofensiva -->
+        <section id="teste-ia-ofensiva" class="scroll-mt-20" data-aos="fade-up">
+            <div class="flex items-center mb-8">
+                <div class="p-3 bg-red-100 rounded-lg text-red-600 mr-4">
+                    <i data-lucide="zap" size="32"></i>
+                </div>
+                <h2 class="text-3xl font-bold">Teste Rápido: Sua empresa vulnerável a IA ofensiva?</h2>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <p class="mb-6 text-gray-600">Responda SIM ou NÃO mentalmente para os 8 itens abaixo:</p>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <span>1. Seus funcionários sabem identificar áudios/vídeos gerados por IA (Deepfakes)?</span>
+                        <span class="text-xs font-bold text-gray-400">Sim / Não</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <span>2. Você utiliza MFA em TODAS as contas corporativas?</span>
+                        <span class="text-xs font-bold text-gray-400">Sim / Não</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <span>3. Sua empresa tem uma "palavra-passe" interna para autorizar transferências?</span>
+                        <span class="text-xs font-bold text-gray-400">Sim / Não</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <span>4. Existe monitoramento de comportamentos anômalos na rede?</span>
+                        <span class="text-xs font-bold text-gray-400">Sim / Não</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <span>5. Os softwares são atualizados automaticamente em menos de 24h?</span>
+                        <span class="text-xs font-bold text-gray-400">Sim / Não</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <span>6. Você realiza testes de intrusão (Pentests) anualmente?</span>
+                        <span class="text-xs font-bold text-gray-400">Sim / Não</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <span>7. Há filtros de e-mail que detectam phishing gerado por IA?</span>
+                        <span class="text-xs font-bold text-gray-400">Sim / Não</span>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <span>8. A equipe sabe como agir se receber um comando de voz do "CEO" pedindo PIX?</span>
+                        <span class="text-xs font-bold text-gray-400">Sim / Não</span>
+                    </div>
+                </div>
+                
+                <div class="mt-8 p-6 bg-red-50 rounded-xl border border-red-100">
+                    <h4 class="font-bold text-red-700 mb-2">Resultado Rápido:</h4>
+                    <p class="text-red-600">Mais de 3 "Não"? Sua empresa está em <span class="font-bold">alto risco</span> para ataques de IA ofensiva em 2026.</p>
+                </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-4 text-sm">
+                <span class="font-bold">Recursos:</span>
+                <a href="https://www.gov.br/anpd/pt-br/assuntos/radar-anpd" target="_blank" class="text-seguranca-azul hover:underline">ANPD Radar</a>
+                <a href="https://owasp.org" target="_blank" class="text-seguranca-azul hover:underline">OWASP</a>
+            </div>
+
+            <div class="mt-10 text-center">
+                <a href="#lead-form" class="text-red-600 font-bold hover:text-red-800 flex items-center justify-center">
+                    Baixe o guia completo de proteção contra IA <i data-lucide="chevron-down" class="ml-1"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- #tendencias-2027 -->
+        <section id="tendencias-2027" class="scroll-mt-20" data-aos="fade-up">
+            <div class="flex items-center mb-8">
+                <div class="p-3 bg-yellow-100 rounded-lg text-yellow-700 mr-4">
+                    <i data-lucide="trending-up" size="32"></i>
+                </div>
+                <h2 class="text-3xl font-bold">Tendências de Cibersegurança 2027</h2>
+            </div>
+
+            <div class="space-y-6">
+                <div class="flex items-start bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <span class="bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">1</span>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Cibercrime Industrializado</h3>
+                        <p class="text-gray-600 text-sm">Ataques automatizados por IA que miram milhares de PMEs simultaneamente com baixo custo para o atacante.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <span class="bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">2</span>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">IA Ofensiva (Vishing e Deepfakes)</h3>
+                        <p class="text-gray-600 text-sm">Golpes via telefone e vídeo que imitam perfeitamente a voz de diretores para autorizar pagamentos fraudulentos.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <span class="bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">3</span>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Zero Trust Everywhere</h3>
+                        <p class="text-gray-600 text-sm">O conceito de "nunca confiar, sempre verificar" será o padrão para qualquer acesso, mesmo interno.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <span class="bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">4</span>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Segurança Human-Centric</h3>
+                        <p class="text-gray-600 text-sm">Foco total em UX: ferramentas de segurança que não atrapalham a produtividade do funcionário.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                <h4 class="font-bold text-blue-800 mb-2 flex items-center"><i data-lucide="info" class="mr-2"></i> Recomendação Prática:</h4>
+                <p class="text-blue-700">Invista em <span class="font-bold">conscientização</span>. A tecnologia evolui, mas o elo mais fraco continua sendo o clique impulsivo no link errado.</p>
+            </div>
+        </section>
+
+        <!-- #lgpd-dicas -->
+        <section id="lgpd-dicas" class="scroll-mt-20" data-aos="fade-up">
+            <div class="flex items-center mb-8">
+                <div class="p-3 bg-seguranca-azul rounded-lg text-white mr-4">
+                    <i data-lucide="shield-alert" size="32"></i>
+                </div>
+                <h2 class="text-3xl font-bold">Dicas Práticas para se Enquadrar na LGPD</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 border-t-4 border-seguranca-azul">
+                    <h3 class="font-bold mb-3">1. Mapeamento</h3>
+                    <p class="text-sm text-gray-600">Identifique onde estão os dados pessoais (planilhas, CRM, e-mails).</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 border-t-4 border-seguranca-azul">
+                    <h3 class="font-bold mb-3">2. Base Legal</h3>
+                    <p class="text-sm text-gray-600">Defina por que você coleta cada dado (Consentimento, Contrato, etc.).</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 border-t-4 border-seguranca-azul">
+                    <h3 class="font-bold mb-3">3. Aviso de Privacidade</h3>
+                    <p class="text-sm text-gray-600">Crie um texto claro no site explicando o uso dos dados.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 border-t-4 border-seguranca-azul">
+                    <h3 class="font-bold mb-3">4. Direitos do Titular</h3>
+                    <p class="text-sm text-gray-600">Crie um canal (e-mail) para clientes pedirem exclusão de dados.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 border-t-4 border-seguranca-azul">
+                    <h3 class="font-bold mb-3">5. Segurança Mínima</h3>
+                    <p class="text-sm text-gray-600">Use senhas fortes e antivírus em todas as máquinas com dados.</p>
+                </div>
+                <div class="p-6 bg-white rounded-xl shadow-sm border border-gray-100 border-t-4 border-seguranca-azul">
+                    <h3 class="font-bold mb-3">6. Gestão de Crise</h3>
+                    <p class="text-sm text-gray-600">Saiba como notificar a ANPD em caso de vazamento em até 48h.</p>
+                </div>
+            </div>
+
+            <div class="mt-8 p-6 bg-seguranca-azul text-white rounded-2xl">
+                <h4 class="font-bold mb-2 flex items-center"><i data-lucide="star" class="mr-2 text-yellow-400"></i> Flexibilização para PMEs (Resolução CD/ANPD nº 2):</h4>
+                <p class="text-sm opacity-90">PMEs têm prazos em dobro e não precisam obrigatoriamente de um DPO (Encarregado) se o tratamento não for de alto risco.</p>
+            </div>
+
+            <div class="mt-6 flex flex-wrap gap-4 text-sm">
+                <span class="font-bold">Recursos:</span>
+                <a href="https://www.gov.br/anpd" target="_blank" class="text-seguranca-azul hover:underline">ANPD (Portal)</a>
+                <a href="https://www.sebrae.com.br" target="_blank" class="text-seguranca-azul hover:underline">Sebrae</a>
+                <a href="https://www.cert.br" target="_blank" class="text-seguranca-azul hover:underline">CERT.br</a>
+            </div>
+        </section>
+
+        <!-- Lead Capture Form -->
+        <section id="lead-form" class="bg-gray-900 text-white p-10 md:p-16 rounded-3xl text-center relative overflow-hidden" data-aos="zoom-in">
+            <div class="relative z-10 max-w-2xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Pronto para proteger sua PME?</h2>
+                <p class="text-gray-400 mb-10">Receba PDFs, templates Word e atualizações 2027 por e-mail (sem spam)</p>
+                
+                <form class="space-y-4 text-left">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Nome Completo</label>
+                            <input type="text" placeholder="Seu nome" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 focus:outline-none focus:border-seguranca-azul text-white" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">E-mail Corporativo</label>
+                            <input type="email" placeholder="seu@email.com.br" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 focus:outline-none focus:border-seguranca-azul text-white" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tipo de Empresa</label>
+                        <select class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 focus:outline-none focus:border-seguranca-azul text-white">
+                            <option>PME</option>
+                            <option>MEI</option>
+                            <option>Startup</option>
+                            <option>Outra</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-seguranca-verde hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all shadow-lg">
+                        Enviar e Receber Tudo Gratuitamente
+                    </button>
+                    <p class="text-center text-xs text-gray-500 mt-4">Respeitamos sua privacidade. Seus dados estão seguros conosco.</p>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 border-t border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-600 text-sm">Copyright 2026 – Diogo | Feito com foco em PMEs brasileiras</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-seguranca-azul text-sm">Privacidade</a>
+                    <a href="#" class="text-gray-500 hover:text-seguranca-azul text-sm">Contato</a>
+                    <span class="text-gray-400 text-sm">Fontes: ANPD, CERT.br, Brasscom</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Inicializa AOS (Animações)
+        AOS.init({
+            duration: 800,
+            once: true,
+        });
+
+        // Inicializa Lucide Icons
+        lucide.createIcons();
+
+        // Smooth Scroll para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

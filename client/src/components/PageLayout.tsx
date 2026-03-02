@@ -1,0 +1,45 @@
+import SiteHeader from "@/components/SiteHeader";
+
+interface PageLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function PageLayout({ children }: PageLayoutProps) {
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans relative">
+      {/* Background Video */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
+        <iframe
+          src="https://player.vimeo.com/video/1169587272?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
+          className="w-full h-full object-cover"
+          allow="autoplay; fullscreen"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '100vw',
+            height: '100vh',
+            transform: 'translate(-50%, -50%)',
+            minWidth: '100%',
+            minHeight: '100%',
+          }}
+        ></iframe>
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+      </div>
+
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <SiteHeader />
+        <main className="flex-grow container max-w-6xl mx-auto px-4 py-12 sm:py-16">
+          {children}
+        </main>
+        <footer className="bg-transparent py-12">
+          <div className="container max-w-6xl mx-auto px-4 text-center border-t border-slate-800 pt-12">
+            <p className="text-slate-500 text-sm font-medium tracking-wide">
+              © 2025 Diogo Martins. Todos os direitos reservados. Integridade guia; mentira e vazamento destroem. (Provérbios 11:3).
+            </p>
+          </div>
+        </footer>
+      </div>
+    </div>
+  );
+}
