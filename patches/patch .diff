@@ -1,0 +1,295 @@
+diff --git a/vercel.json b/vercel.json
+--- a/vercel.json
++++ b/vercel.json
+@@ -1,28 +1,20 @@
+-{
+-  "buildCommand": "vite build",
+-  "outputDirectory": "dist",
+-  "framework": "vite",
+-  "cleanUrls": true,
+-  "trailingSlash": false,
+-  "rewrites": [
+-    {
+-      "source": "/api/(.*)",
+-      "destination": "/api/$1"
+-    },
+-    {
+-      "source": "/(.*)",
+-      "destination": "/index.html"
+-    }
+-  ],
+-  "headers": [
+-    {
+-      "source": "/(.*)",
+-      "headers": [
+-        {
+-          "key": "Cache-Control",
+-          "value": "public, max-age=0, must-revalidate"
+-        }
+-      ]
+-    }
+-  ]
+-}
++{
++  "framework": "vite",
++  "buildCommand": "pnpm build",
++  "outputDirectory": "dist",
++  "cleanUrls": true,
++  "trailingSlash": false,
++  "rewrites": [
++    { "source": "/api/(.*)", "destination": "/api/$1" },
++    { "source": "/(.*)", "destination": "/" }
++  ],
++  "headers": [
++    {
++      "source": "/(.*)",
++      "headers": [
++        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
++      ]
++    }
++  ]
++}
+diff --git a/client/index.html b/client/index.html
+--- a/client/index.html
++++ b/client/index.html
+@@ -14,9 +14,24 @@
+   </head>
+ 
+   <body>
+     <div id="root"></div>
++    <script>
++      (function () {
++        try {
++          var redirectPath = sessionStorage.getItem("spa_redirect");
++          if (redirectPath) {
++            sessionStorage.removeItem("spa_redirect");
++            if (location.pathname === "/" && redirectPath.charAt(0) === "/") {
++              history.replaceState(null, "", redirectPath);
++            }
++          }
++        } catch (e) {
++        }
++      })();
++    </script>
+     <script type="module" src="/src/main.tsx"></script>
+     <script
+       defer
+       src="%VITE_ANALYTICS_ENDPOINT%/umami"
+       data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+   </body>
+ 
+ </html>
+diff --git a/client/public/404.html b/client/public/404.html
+new file mode 100644
+--- /dev/null
++++ b/client/public/404.html
+@@ -0,0 +1,34 @@
++<!doctype html>
++<html lang="en">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>Redirecting…</title>
++    <meta http-equiv="refresh" content="0; url=/" />
++    <script>
++      (function () {
++        try {
++          var path = location.pathname + location.search + location.hash;
++          sessionStorage.setItem("spa_redirect", path);
++        } catch (e) {}
++        location.replace("/");
++      })();
++    </script>
++    <style>
++      body {
++        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
++        display: grid;
++        place-items: center;
++        height: 100vh;
++        margin: 0;
++      }
++    </style>
++  </head>
++  <body>
++    <p>Redirecionando…</p>
++  </body>
++</html>
+diff --git a/client/src/index.css b/client/src/index.css
+--- a/client/src/index.css
++++ b/client/src/index.css
+@@ -143,6 +143,31 @@
+ }
+ 
+ @layer components {
++  .heading-hero {
++    font-size: clamp(2rem, 4.5vw + 0.5rem, 4.5rem);
++    line-height: 1.1;
++    font-weight: 700;
++  }
++
++  .heading-section {
++    font-size: clamp(1.5rem, 2.5vw + 0.5rem, 3rem);
++    line-height: 1.2;
++    font-weight: 700;
++  }
++
++  .lead {
++    font-size: clamp(1rem, 1.2vw + 0.6rem, 1.25rem);
++    line-height: 1.6;
++  }
++
++  img, video, canvas, svg {
++    max-width: 100%;
++    height: auto;
++  }
++
+   /**
+    * Custom container utility that centers content and adds responsive padding.
+    *
+diff --git a/client/src/pages/Home.tsx b/client/src/pages/Home.tsx
+--- a/client/src/pages/Home.tsx
++++ b/client/src/pages/Home.tsx
+@@ -84,13 +84,13 @@
+-          <div className="flex gap-8 items-center">
+-            <a href="#sobre" className="hover:text-blue-400 transition-colors">Sobre</a>
+-            <a href="#experiencia" className="hover:text-blue-400 transition-colors">Experiência</a>
+-            <a href="#certificacoes" className="hover:text-blue-400 transition-colors">Formação</a>
+-            <a href="/dicas-seguranca" className="hover:text-blue-400 transition-colors">Dicas</a>
+-            <a href="#contato" className="hover:text-blue-400 transition-colors">Contato</a>
+-          </div>
++          <div className="flex items-center gap-4 md:gap-8 flex-wrap justify-end max-w-full overflow-x-auto">
++            <a href="#sobre" className="hover:text-blue-400 transition-colors text-sm md:text-base">Sobre</a>
++            <a href="#experiencia" className="hover:text-blue-400 transition-colors text-sm md:text-base">Experiência</a>
++            <a href="#certificacoes" className="hover:text-blue-400 transition-colors text-sm md:text-base">Formação</a>
++            <a href="/dicas-seguranca" className="hover:text-blue-400 transition-colors text-sm md:text-base">Dicas</a>
++            <a href="#contato" className="hover:text-blue-400 transition-colors text-sm md:text-base">Contato</a>
++          </div>
+@@ -107,18 +107,18 @@
+-        <div className="container max-w-6xl mx-auto px-4 relative z-10">
+-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
++        <div className="container max-w-6xl mx-auto px-4 relative z-10">
++          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+             <div className="space-y-6 animate-fade-in">
+               <div>
+-                <h1 className="text-6xl md:text-7xl font-bold mb-4 leading-tight">
++                <h1 className="heading-hero mb-4">
+                   Diogo <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">Martins</span>
+                 </h1>
+-                <p className="text-xl text-muted-foreground font-semibold">Especialista em Segurança da Informação & Gestão de Tecnologia</p>
++                <p className="lead text-muted-foreground font-semibold">Especialista em Segurança da Informação & Gestão de Tecnologia</p>
+               </div>
+-              <p className="text-lg text-foreground/80 leading-relaxed">
++              <p className="lead text-foreground/80">
+                 Profissional de Segurança da Informação com mais de 3 anos de experiência na implementação de políticas de conformidade, gestão de infraestrutura Microsoft 365 e Azure, e proteção de dados corporativos. Possui 15 anos de experiência em suporte técnico de software, com atuação focada na resolução de incidentes e no atendimento ao usuário. Vivência sólida em segurança física, incluindo monitoramento, gestão e implementação de sistemas de CFTV, garantindo a integridade de ambientes e ativos organizacionais.
+               </p>
+               <div className="flex gap-4 pt-4 flex-wrap">
+                 <a href="mailto:diogo@dmssecurity.com.br" className="inline-block">
+-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-6 text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/50">
++                  <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-4 text-base sm:px-8 sm:py-6 sm:text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/50">
+                     <Mail className="mr-2" /> E-mail
+                   </Button>
+                 </a>
+                 <a href="https://wa.me/5511998178532" target="_blank" rel="noopener noreferrer" className="inline-block">
+-                  <Button variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500/10 px-8 py-6 text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50">
++                  <Button variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500/10 px-5 py-4 text-base sm:px-8 sm:py-6 sm:text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50">
+                     <MessageCircle className="mr-2" /> WhatsApp
+                   </Button>
+                 </a>
+@@ -139,9 +139,9 @@
+-          <h2 className="text-5xl font-bold mb-12 text-center">Sobre Mim</h2>
++          <h2 className="heading-section mb-8 md:mb-12 text-center">Sobre Mim</h2>
+           <div className="space-y-8">
+             <Card className="bg-card border-border p-8 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20">
+-              <p className="text-lg text-foreground/80 leading-relaxed mb-6">
++              <p className="lead text-foreground/80 mb-6">
+                 Sou um profissional apaixonado por tecnologia, segurança da informação, controle e privacidade. Minha trajetória começou aos 22 anos na área de segurança física, atuando como Vigilante, onde desenvolvi uma base sólida nos principais conceitos de proteção, prevenção, controle de acesso e gestão de riscos.
+               </p>
+-              <p className="text-lg text-foreground/80 leading-relaxed mb-6">
++              <p className="lead text-foreground/80 mb-6">
+                 Paralelamente, atuei nos bastidores do setor de e-commerce e concluí o curso técnico em manutenção e atualização de software e hardware, ingressando de vez no mercado digital. Também atuei como designer após formação técnica na área, sempre movido pela curiosidade e pelo interesse constante em tecnologia.
+               </p>
+-              <p className="text-lg text-foreground/80 leading-relaxed mb-6">
++              <p className="lead text-foreground/80 mb-6">
+                 Buscando evolução profissional, graduei-me em Gestão de Tecnologia, seguido de uma Pós-Graduação em Cyber Segurança e um MBA em Privacidade e Proteção de Dados, além de diversos cursos de extensão na área de Segurança da Informação.
+               </p>
+-              <p className="text-lg text-foreground/80 leading-relaxed">
++              <p className="lead text-foreground/80">
+                 Hoje, com sólida experiência de mercado, atuo na implementação de políticas de segurança, gestão de tecnologia e proteção de dados, ajudando empresas a se desenvolverem e amadurecerem tecnologicamente com segurança, credibilidade e conformidade.
+               </p>
+             </Card>
+@@ -162,7 +162,7 @@
+-          <h2 className="text-5xl font-bold mb-12 text-center">Experiência Profissional</h2>
++          <h2 className="heading-section mb-8 md:mb-12 text-center">Experiência Profissional</h2>
+@@ -191,7 +191,7 @@
+-          <h2 className="text-5xl font-bold mb-12 text-center">Cursos e Formações</h2>
++          <h2 className="heading-section mb-8 md:mb-12 text-center">Cursos e Formações</h2>
+@@ -197,7 +197,7 @@
+-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
++                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 sm:gap-6">
+@@ -224,9 +224,9 @@
+-          <h2 className="text-5xl font-bold mb-12 text-center">Habilidades & Competências</h2>
+-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
++          <h2 className="heading-section mb-8 md:mb-12 text-center">Habilidades & Competências</h2>
++          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+@@ -246,14 +246,14 @@
+-          <h2 className="text-5xl font-bold mb-6">Vamos Conversar?</h2>
+-          <p className="text-xl text-foreground/80 mb-12 max-w-2xl mx-auto">
++          <h2 className="heading-section mb-6">Vamos Conversar?</h2>
++          <p className="lead text-foreground/80 mb-8 sm:mb-12 max-w-2xl mx-auto">
+             Estou sempre aberto a novas oportunidades, projetos desafiadores e colaborações. Sinta-se livre para entrar em contato!
+           </p>
+           <div className="flex flex-col md:flex-row gap-6 justify-center items-center flex-wrap">
+             <a href="mailto:diogo@dmssecurity.com.br" className="inline-block">
+-              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-6 text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/50">
++              <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-4 text-base sm:px-8 sm:py-6 sm:text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/50">
+                 <Mail className="mr-2" /> diogo@dmssecurity.com.br
+               </Button>
+             </a>
+             <a href="https://wa.me/5511998178532" target="_blank" rel="noopener noreferrer" className="inline-block">
+-              <Button variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500/10 px-8 py-6 text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50">
++              <Button variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500/10 px-5 py-4 text-base sm:px-8 sm:py-6 sm:text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50">
+                 <MessageCircle className="mr-2" /> (11) 99817-8532
+               </Button>
+             </a>
+diff --git a/client/src/pages/SecurityTips.tsx b/client/src/pages/SecurityTips.tsx
+--- a/client/src/pages/SecurityTips.tsx
++++ b/client/src/pages/SecurityTips.tsx
+@@ -167,14 +167,14 @@
+-      <main className="container py-12">
++      <main className="container py-8 sm:py-12">
+         {/* Hero Section */}
+         <div className="mb-16">
+-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
++          <h1 className="heading-section text-white mb-4">
+             Segurança da Informação: Temas Essenciais
+           </h1>
+-          <p className="text-xl text-slate-300 max-w-3xl">
++          <p className="lead text-slate-300 max-w-3xl">
+             A segurança da informação tornou-se um dos pilares mais importantes para empresas e usuários. Com o aumento de ataques digitais, vazamentos de dados e golpes online, manter-se informado sobre as principais ameaças e práticas de proteção é fundamental.
+           </p>
+         </div>
+ 
+         {/* Tips Grid */}
+-        <div className="grid md:grid-cols-2 gap-8 mb-16">
++        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-16">
+diff --git a/client/src/pages/SocialMediaSecurity.tsx b/client/src/pages/SocialMediaSecurity.tsx
+--- a/client/src/pages/SocialMediaSecurity.tsx
++++ b/client/src/pages/SocialMediaSecurity.tsx
+@@ -126,19 +126,19 @@
+-      <main className="container py-12">
++      <main className="container py-8 sm:py-12">
+         {/* Hero Section */}
+         <div className="mb-16">
+-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
++          <h1 className="heading-section text-white mb-4">
+             Segurança nas Redes Sociais
+           </h1>
+-          <p className="text-xl text-slate-300 max-w-3xl">
++          <p className="lead text-slate-300 max-w-3xl">
+             As redes sociais fazem parte do nosso dia a dia. Com algumas atitudes simples, você pode usar redes sociais com muito mais segurança e evitar golpes, invasões de contas e vazamento de informações pessoais.
+           </p>
+         </div>
+ 
+         {/* Tips Grid */}
+-        <div className="grid md:grid-cols-2 gap-8 mb-16">
++        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-16">
