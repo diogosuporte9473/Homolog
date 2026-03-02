@@ -1,4 +1,4 @@
-import SiteHeader from "@/components/SiteHeader";
+import PageLayout from "@/components/PageLayout";
 import { useParams, useLocation } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -167,16 +167,17 @@ export default function NoticiaDetalhe() {
 
   if (!noticia) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
-        <h1 className="text-2xl text-white mb-4">Notícia não encontrada</h1>
-        <Button onClick={() => setLocation("/seguranca-tecnologia")}>Voltar</Button>
-      </div>
+      <PageLayout>
+        <div className="flex flex-col items-center justify-center p-4">
+          <h1 className="text-2xl text-white mb-4">Notícia não encontrada</h1>
+          <Button onClick={() => setLocation("/seguranca-tecnologia")}>Voltar</Button>
+        </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200">
-      <SiteHeader />
+    <PageLayout>
 
       <main className="container max-w-4xl py-12 px-4">
         <Button 
@@ -268,14 +269,6 @@ export default function NoticiaDetalhe() {
         </article>
       </main>
 
-      {/* Rodapé Padrão */}
-      <footer className="bg-slate-950 py-12 border-t border-slate-900 mt-20">
-        <div className="container max-w-6xl mx-auto px-4 text-center">
-          <p className="text-slate-500 text-sm font-medium tracking-wide mb-2">
-            © 2025 Diogo Martins. Todos os direitos reservados. Integridade guia; mentira e vazamento destroem. (Provérbios 11:3).
-          </p>
-        </div>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }

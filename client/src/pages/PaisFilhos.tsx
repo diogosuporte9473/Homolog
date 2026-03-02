@@ -1,4 +1,4 @@
-import SiteHeader from "@/components/SiteHeader";
+import PageLayout from "@/components/PageLayout";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function PaisFilhos() {
@@ -38,8 +38,7 @@ export default function PaisFilhos() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <SiteHeader />
+    <PageLayout>
       <main className="container max-w-6xl mx-auto px-4 py-8 md:py-12">
         <section className="mb-10">
           <h1 className="heading-section mb-4">
@@ -196,6 +195,6 @@ export default function PaisFilhos() {
           </div>
         </section>
       </main>
-    </div>
+    </PageLayout>
   );
 }

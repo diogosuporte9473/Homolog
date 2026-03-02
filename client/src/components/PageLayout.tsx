@@ -8,13 +8,15 @@ export default function PageLayout({ children }: PageLayoutProps) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 font-sans relative">
       {/* Background Video */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
+      <div className="fixed inset-0 w-full h-full overflow-hidden z-0">
         <iframe
-          src="https://player.vimeo.com/video/1169587272?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1"
+          src="https://player.vimeo.com/video/1169587272?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&controls=0&fl=ip&fe=ec"
           className="w-full h-full object-cover"
-          allow="autoplay; fullscreen"
+          allow="autoplay; fullscreen; picture-in-picture"
+          frameBorder="0"
+          title="DMS Security Background"
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: '50%',
             left: '50%',
             width: '100vw',
@@ -22,9 +24,10 @@ export default function PageLayout({ children }: PageLayoutProps) {
             transform: 'translate(-50%, -50%)',
             minWidth: '100%',
             minHeight: '100%',
+            pointerEvents: 'none',
           }}
         ></iframe>
-        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen">

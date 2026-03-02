@@ -1,26 +1,12 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import SiteHeader from "@/components/SiteHeader";
+import PageLayout from "@/components/PageLayout";
 import { Shield, ArrowRight, BookOpen, Users } from "lucide-react";
 
 export default function Inicio() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <SiteHeader />
+    <PageLayout>
       <section className="relative pt-24 pb-20 overflow-hidden">
-        {/* Background video (blurred) */}
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <div className="absolute inset-0">
-            <iframe
-              src="https://player.vimeo.com/video/1166795283?autoplay=1&muted=1&loop=1&autopause=0&controls=0&title=0&byline=0&portrait=0&playsinline=1&dnt=1"
-              className="absolute inset-0 w-full h-full [filter:blur(6px)] scale-[1.2]"
-              allow="autoplay; fullscreen; picture-in-picture"
-              loading="lazy"
-              title="Background Video"
-            />
-          </div>
-          <div className="absolute inset-0 bg-black/35" />
-        </div>
         <div className="container max-w-6xl mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             <div className="space-y-6">
@@ -102,7 +88,7 @@ export default function Inicio() {
           </div>
         </div>
       </section>
-    </div>
+    </PageLayout>
   );
 }
 

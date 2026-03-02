@@ -1,3 +1,4 @@
+import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Mail, Shield, Award, Lock, Server, BarChart3, ChevronDown } from "lucide-react";
@@ -8,7 +9,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import SiteHeader from "@/components/SiteHeader";
 
 /**
  * Tech Forward Design - Dark theme with cyan and purple accents
@@ -67,19 +67,9 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <SiteHeader />
-
+    <PageLayout>
       {/* Hero Section */}
       <section className="relative pt-24 pb-20 overflow-hidden">
-        <div 
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage: 'url(https://private-us-east-1.manuscdn.com/sessionFile/aziaCIJGSaos0LnywPDCDU/sandbox/FdLWR4CU73KFk9G6fWmCCg-img-1_1770753444000_na1fn_aGVyby1iYWNrZ3JvdW5k.png?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
-        />
         <div className="container max-w-6xl mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="space-y-6 animate-fade-in">
@@ -100,7 +90,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <div className="relative">
+            <div className="relative hidden">
            <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black/40 shadow-xl">
             <iframe
             src="https://player.vimeo.com/video/1166670189?autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0&playsinline=1&dnt=1&controls=0"
@@ -210,15 +200,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-background/50 py-8">
-        <div className="container max-w-6xl mx-auto px-4 text-center text-muted-foreground">
-          <p>© 2025 Diogo Martins. Todos os direitos reservados.
-            Integridade guia; mentira e vazamento destroem.
-             (Provérbios 11:3).</p>
-        </div>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }

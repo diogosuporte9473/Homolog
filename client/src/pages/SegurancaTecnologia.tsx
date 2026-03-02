@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Shield, AlertCircle, Cloud, Brain, Users, CheckCircle2, Zap, Lock, Bell, Database, Mail, Newspaper, BookOpenIcon, TrendingUpIcon, WrenchIcon } from "lucide-react";
-import SiteHeader from "@/components/SiteHeader";
+import PageLayout from "@/components/PageLayout";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Link } from "wouter";
 
@@ -368,9 +368,7 @@ export default function SegurancaTecnologia() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-foreground">
-      <SiteHeader />
-
+    <PageLayout>
       <main className="container py-8 sm:py-12">
         <section className="mb-12">
           <h2 className="heading-section text-center mb-4">Centro de Segurança da Informação e Tecnologia</h2>
@@ -663,6 +661,6 @@ export default function SegurancaTecnologia() {
           </div>
         </section>
       </main>
-    </div>
+    </PageLayout>
   );
 }

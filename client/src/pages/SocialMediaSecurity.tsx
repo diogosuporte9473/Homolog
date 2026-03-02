@@ -1,5 +1,5 @@
 import { Lock, AlertTriangle, Eye, User, Shield, Smartphone, CheckCircle2 } from "lucide-react";
-import SiteHeader from "@/components/SiteHeader";
+import PageLayout from "@/components/PageLayout";
 
 export default function SocialMediaSecurity() {
   const tips = [
@@ -143,9 +143,7 @@ export default function SocialMediaSecurity() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      <SiteHeader />
-
+    <PageLayout>
       {/* Main Content */}
       <main className="container py-8 sm:py-12">
         {/* Hero Section */}
@@ -241,6 +239,6 @@ export default function SocialMediaSecurity() {
           </a>
         </div>
       </main>
-    </div>
+    </PageLayout>
   );
 }

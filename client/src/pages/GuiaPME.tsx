@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SiteHeader from "@/components/SiteHeader";
+import PageLayout from "@/components/PageLayout";
 import { 
   ShieldCheck, 
   ListChecks, 
@@ -57,8 +57,7 @@ export default function GuiaPME() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans selection:bg-blue-500/30">
-      <SiteHeader />
+    <PageLayout>
 
       {/* Hero Section */}
       <header className="relative py-12 md:py-20 lg:py-32 overflow-hidden border-b border-slate-800">
@@ -461,14 +460,6 @@ export default function GuiaPME() {
 
       </main>
 
-      {/* Footer Branding */}
-      <footer className="bg-slate-950 py-12 border-t border-slate-900">
-        <div className="container max-w-6xl mx-auto px-4 text-center">
-          <p className="text-slate-500 text-sm font-medium tracking-wide mb-2">
-            © 2025 Diogo Martins. Todos os direitos reservados. Integridade guia; mentira e vazamento destroem. (Provérbios 11:3).
-          </p>
-        </div>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }
