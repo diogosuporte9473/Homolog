@@ -1,13 +1,11 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import PageLayout from "@/components/PageLayout";
-import HeroSection from "@/components/HeroSection";
 import { Shield, ArrowRight, BookOpen, Users } from "lucide-react";
 
 export default function Inicio() {
   return (
     <PageLayout>
-      <HeroSection />
       <section className="relative pt-24 pb-20 overflow-hidden">
         <div className="container max-w-6xl mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">

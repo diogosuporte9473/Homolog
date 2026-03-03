@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Inicio from "./pages/Inicio";
+import Intro from "./pages/Intro";
 import SecurityTips from "./pages/SecurityTips";
 import SocialMediaSecurity from "./pages/SocialMediaSecurity";
 import SegurancaTecnologia from "./pages/SegurancaTecnologia";
@@ -18,7 +19,8 @@ import NoticiaDetalhe from "./pages/NoticiaDetalhe";
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Inicio} />
+      <Route path={"/"} component={Intro} />
+      <Route path={"/inicio"} component={Inicio} />
       <Route path={"/sobre"} component={Home} />
       <Route path={"/dicas-seguranca"} component={SecurityTips} />
       <Route path={"/dicas-redes-sociais"} component={SocialMediaSecurity} />

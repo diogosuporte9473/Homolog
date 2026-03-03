@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import { useLocation } from 'wouter';
 
 export default function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -123,14 +125,7 @@ export default function HeroSection() {
               Segurança da informação, privacidade e tecnologia com foco em conscientização e proteção de dados. Acompanhe as tendências de cyber security e mantenha seus dados seguros.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" className="bg-cyan-500 hover:bg-cyan-600 text-black font-semibold px-8 py-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/50">
-                Explorar Agora
-              </Button>
-              <Button size="lg" variant="outline" className="border-2 border-cyan-500 text-cyan-400 hover:bg-cyan-500/10 font-semibold px-8 py-6 rounded-lg transition-all duration-300">
-                Saiba Mais
-              </Button>
-            </div>
+            <div className="h-8" />
 
             <div className="pt-8 border-t border-gray-700/50 space-y-3">
               <p className="text-sm text-gray-400 font-mono">Confiado por:</p>
@@ -158,7 +153,12 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
+      <div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce cursor-pointer select-none"
+        onClick={() => setLocation("/inicio")}
+        aria-label="Abrir página inicial"
+        role="button"
+      >
         <div className="text-center">
           <p className="text-xs text-gray-500 font-mono mb-2">SCROLL</p>
           <svg className="w-5 h-5 text-cyan-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
