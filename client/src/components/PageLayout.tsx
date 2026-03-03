@@ -10,7 +10,7 @@ export default function PageLayout({ children }: PageLayoutProps) {
       {/* Background Video */}
       <div className="fixed inset-0 w-full h-full overflow-hidden z-0">
         <iframe
-          src="https://player.vimeo.com/video/1169587272?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&controls=0&fl=ip&fe=ec"
+          src="https://player.vimeo.com/video/1169587272?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&controls=0&playsinline=1&dnt=1&fl=ip&fe=ec"
           className="w-full h-full object-cover"
           allow="autoplay; fullscreen; picture-in-picture"
           frameBorder="0"
