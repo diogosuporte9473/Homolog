@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Menu as MenuIcon } from "lucide-react";
+import { Menu as MenuIcon, User } from "lucide-react";
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -10,15 +10,22 @@ export default function SiteHeader() {
         <Link href="/" className="text-lg md:text-xl font-bold text-blue-400/90 hover:text-blue-400 transition-colors">
           DMS Security
         </Link>
-        <button
-          className="md:hidden inline-flex items-center justify-center rounded-md border border-border/60 size-9 text-foreground/80 hover:bg-muted/30 hover:text-foreground transition-colors"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label="Abrir menu"
-          onClick={() => setOpen(v => !v)}
-        >
-          <MenuIcon className="size-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <Link href="/admin/login">
+            <button className="flex items-center justify-center rounded-md border border-border/60 size-9 text-foreground/80 hover:bg-muted/30 hover:text-blue-400 transition-colors" title="Acesso Administrativo">
+              <User className="size-5" />
+            </button>
+          </Link>
+          <button
+            className="md:hidden inline-flex items-center justify-center rounded-md border border-border/60 size-9 text-foreground/80 hover:bg-muted/30 hover:text-foreground transition-colors"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label="Abrir menu"
+            onClick={() => setOpen(v => !v)}
+          >
+            <MenuIcon className="size-5" />
+          </button>
+        </div>
         <nav className="hidden md:flex items-center gap-5 justify-end text-sm">
           <Link href="/" className="opacity-80 hover:opacity-100 hover:text-blue-400 transition-colors">Início</Link>
           <Link href="/sobre" className="opacity-80 hover:opacity-100 hover:text-blue-400 transition-colors">Sobre</Link>
