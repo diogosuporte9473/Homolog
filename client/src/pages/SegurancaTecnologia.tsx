@@ -23,6 +23,12 @@ export default function SegurancaTecnologia() {
   }, []);
 
   const publicoAlvo = [
+    "Profissionais de TI e Segurança",
+    "CISOs, Gestores e Líderes",
+    "Analistas e Especialistas",
+    "Estudantes e Iniciantes",
+    "Desenvolvedores e SRE/DevOps",
+  ];
 
   const noticiasRecentes = [
     {
