@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PageLayout from "@/components/PageLayout";
 import { 
   ShieldCheck, 
@@ -18,11 +18,31 @@ import {
   Star,
   Check,
   Minus,
-  X
+  X,
+  Newspaper,
+  Calendar,
+  ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Card } from "@/components/ui/card";
+import { Link } from "wouter";
+import axios from "axios";
 
 export default function GuiaPME() {
+  const [noticiasCarrossel, setNoticiasCarrossel] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchNoticias = async () => {
+      try {
+        const response = await axios.get("/api/posts");
+        setNoticiasCarrossel(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar notícias:", error);
+      }
+    };
+    fetchNoticias();
+  }, []);
   // Estados para os questionários
   const [maturityAnswers, setMaturityAnswers] = useState<Record<number, string>>({});
   const [iaAnswers, setIaAnswers] = useState<Record<number, string>>({});
@@ -441,21 +461,82 @@ export default function GuiaPME() {
           </div>
         </section>
 
-        {/* Contact Section */}
-        <section id="contato" className="scroll-mt-24 py-20 border-t border-slate-800/50">
-          <div className="container max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Vamos Conversar?</h2>
-            <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-              Estou sempre aberto a novas oportunidades, projetos desafiadores e colaborações. Sinta-se livre para entrar em contato!
-            </p>
-            <a 
-              href="mailto:diogo@dmssecurity.com.br" 
-              className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all shadow-lg shadow-blue-900/20 hover:scale-[1.02]"
-            >
-              <Mail size={20} />
-              diogo@dmssecurity.com.br
-            </a>
+        {/* #contato */}
+        <section id="contato" className="scroll-mt-24">
+          <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-[3rem] p-8 md:p-16 text-center relative overflow-hidden shadow-2xl shadow-blue-500/20">
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Pronto para elevar o nível da sua segurança?</h2>
+              <p className="text-blue-100 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
+                Não espere um incidente acontecer para agir. Comece hoje mesmo a proteger seu maior patrimônio: seus dados e sua reputação.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-bold px-10 h-14 rounded-2xl text-lg shadow-xl">
+                  Falar com Especialista
+                </Button>
+                <Button size="lg" variant="outline" className="border-blue-400 text-white hover:bg-blue-700/50 font-bold px-10 h-14 rounded-2xl text-lg">
+                  Ver Cases de Sucesso
+                </Button>
+              </div>
+            </div>
+            <Zap className="absolute -bottom-10 -left-10 text-white/10 w-64 h-64 -rotate-12" />
           </div>
+        </section>
+
+        <section className="mb-20">
+          <h2 className="text-3xl font-bold mb-8 flex items-center gap-3 text-white">
+            <Newspaper className="h-8 w-8 text-blue-500" />
+            Alertas e Insights para PMEs
+          </h2>
+          
+          {noticiasCarrossel.length > 0 ? (
+            <div className="relative px-12">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {noticiasCarrossel.map((noticia) => (
+                    <CarouselItem key={noticia.id} className="md:basis-1/2 lg:basis-1/3">
+                      <Card className="overflow-hidden border-slate-700 bg-slate-800/50 hover:border-blue-500/50 transition-all group h-full flex flex-col">
+                        <div className="aspect-video relative overflow-hidden">
+                          <img 
+                            src={noticia.imagem} 
+                            alt={noticia.titulo}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute top-3 left-3">
+                            <span className="px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                              {noticia.categoria}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-5 flex-grow flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-bold text-lg mb-3 line-clamp-2 text-white group-hover:text-blue-400 transition-colors">
+                              {noticia.titulo}
+                            </h3>
+                            <div className="flex items-center gap-4 text-xs text-slate-400 mb-4">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="h-3 w-3" /> {noticia.data}
+                              </span>
+                            </div>
+                          </div>
+                          <Link href={`/noticia/${noticia.id}`}>
+                            <Button variant="outline" size="sm" className="w-full border-blue-500/20 text-blue-400 hover:bg-blue-500/10 group/btn">
+                              Saiba Mais <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                            </Button>
+                          </Link>
+                        </div>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="-left-4 bg-slate-800/80 hover:bg-blue-600 hover:text-white border-slate-700" />
+                <CarouselNext className="-right-4 bg-slate-800/80 hover:bg-blue-600 hover:text-white border-slate-700" />
+              </Carousel>
+            </div>
+          ) : (
+            <div className="text-center py-12 border border-dashed border-slate-700 rounded-xl">
+              <p className="text-slate-400">Carregando conteúdos...</p>
+            </div>
+          )}
         </section>
 
       </main>

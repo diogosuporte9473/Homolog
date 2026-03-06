@@ -1,7 +1,28 @@
 import PageLayout from "@/components/PageLayout";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Newspaper, ArrowRight, ShieldCheck, Calendar, User } from "lucide-react";
+import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function PaisFilhos() {
+  const [noticiasCarrossel, setNoticiasCarrossel] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchNoticias = async () => {
+      try {
+        const response = await axios.get("/api/posts");
+        setNoticiasCarrossel(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar notícias:", error);
+      }
+    };
+    fetchNoticias();
+  }, []);
+
   const riscos = [
     {
       titulo: "Compartilhar demais",
@@ -173,6 +194,63 @@ export default function PaisFilhos() {
           <p className="text-foreground/90">
             Você não precisa ser expert em tecnologia. Basta ser presente, curioso e firme. A criança mais protegida não é a com mais bloqueios, mas a que tem um adulto de confiança para contar qualquer coisa sem medo.
           </p>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+            <Newspaper className="h-7 w-7 text-blue-500" />
+            Notícias e Alertas Recentes
+          </h2>
+          
+          {noticiasCarrossel.length > 0 ? (
+            <div className="relative px-12">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {noticiasCarrossel.map((noticia) => (
+                    <CarouselItem key={noticia.id} className="md:basis-1/2 lg:basis-1/3">
+                      <Card className="overflow-hidden border-border/40 bg-card/50 hover:border-blue-500/50 transition-all group h-full flex flex-col">
+                        <div className="aspect-video relative overflow-hidden">
+                          <img 
+                            src={noticia.imagem} 
+                            alt={noticia.titulo}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute top-3 left-3">
+                            <span className="px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                              {noticia.categoria}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-5 flex-grow flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-bold text-lg mb-3 line-clamp-2 group-hover:text-blue-400 transition-colors">
+                              {noticia.titulo}
+                            </h3>
+                            <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="h-3 w-3" /> {noticia.data}
+                              </span>
+                            </div>
+                          </div>
+                          <Link href={`/noticia/${noticia.id}`}>
+                            <Button variant="outline" size="sm" className="w-full border-blue-500/20 hover:bg-blue-500/10 hover:text-blue-400 group/btn">
+                              Ler Notícia <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                            </Button>
+                          </Link>
+                        </div>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="-left-4 bg-background/80 hover:bg-blue-600 hover:text-white border-border" />
+                <CarouselNext className="-right-4 bg-background/80 hover:bg-blue-600 hover:text-white border-border" />
+              </Carousel>
+            </div>
+          ) : (
+            <div className="text-center py-12 border border-dashed border-border rounded-xl">
+              <p className="text-muted-foreground">Carregando notícias...</p>
+            </div>
+          )}
         </section>
 
         <section className="mb-6">

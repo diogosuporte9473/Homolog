@@ -1,7 +1,27 @@
-import { Lock, AlertTriangle, Eye, User, Shield, Smartphone, CheckCircle2 } from "lucide-react";
+import { Lock, AlertTriangle, Eye, User, Shield, Smartphone, CheckCircle2, Newspaper, Calendar, ArrowRight } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function SocialMediaSecurity() {
+  const [noticiasCarrossel, setNoticiasCarrossel] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchNoticias = async () => {
+      try {
+        const response = await axios.get("/api/posts");
+        setNoticiasCarrossel(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar notícias:", error);
+      }
+    };
+    fetchNoticias();
+  }, []);
+
   const tips = [
     {
       id: 1,
@@ -205,6 +225,63 @@ export default function SocialMediaSecurity() {
             );
           })}
         </div>
+
+        <section className="mb-20">
+          <h2 className="text-3xl font-bold mb-8 flex items-center gap-3 text-white">
+            <Newspaper className="h-8 w-8 text-blue-500" />
+            Alertas e Novidades das Redes
+          </h2>
+          
+          {noticiasCarrossel.length > 0 ? (
+            <div className="relative px-12">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {noticiasCarrossel.map((noticia) => (
+                    <CarouselItem key={noticia.id} className="md:basis-1/2 lg:basis-1/3">
+                      <Card className="overflow-hidden border-slate-700 bg-slate-800/50 hover:border-blue-500/50 transition-all group h-full flex flex-col">
+                        <div className="aspect-video relative overflow-hidden">
+                          <img 
+                            src={noticia.imagem} 
+                            alt={noticia.titulo}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute top-3 left-3">
+                            <span className="px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">
+                              {noticia.categoria}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-5 flex-grow flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-bold text-lg mb-3 line-clamp-2 text-white group-hover:text-blue-400 transition-colors">
+                              {noticia.titulo}
+                            </h3>
+                            <div className="flex items-center gap-4 text-xs text-slate-400 mb-4">
+                              <span className="flex items-center gap-1">
+                                <Calendar className="h-3 w-3" /> {noticia.data}
+                              </span>
+                            </div>
+                          </div>
+                          <Link href={`/noticia/${noticia.id}`}>
+                            <Button variant="outline" size="sm" className="w-full border-blue-500/20 text-blue-400 hover:bg-blue-500/10 group/btn">
+                              Ver Mais <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                            </Button>
+                          </Link>
+                        </div>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="-left-4 bg-slate-800/80 hover:bg-blue-600 hover:text-white border-slate-700" />
+                <CarouselNext className="-right-4 bg-slate-800/80 hover:bg-blue-600 hover:text-white border-slate-700" />
+              </Carousel>
+            </div>
+          ) : (
+            <div className="text-center py-12 border border-dashed border-slate-700 rounded-xl">
+              <p className="text-slate-400">Carregando conteúdos...</p>
+            </div>
+          )}
+        </section>
 
         {/* Golden Rule */}
         <div className="bg-gradient-to-r from-amber-900/30 to-amber-800/20 border border-amber-500/30 rounded-lg p-8 mb-8">
