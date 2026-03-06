@@ -5,28 +5,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 
-export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    vitePluginManusDebugCollector(),
-    jsxLocPlugin(),
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./client/src"),
-    },
-  },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true,
-      },
-    },
-  },
-});
-
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
 // Writes browser logs directly to files, trimmed when exceeding size limit
@@ -190,6 +168,12 @@ export default defineConfig({
     chunkSizeWarningLimit: 1500,
   },
   server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
     port: 3000,
     strictPort: false, // Will find next available port if 3000 is busy
     host: true,
