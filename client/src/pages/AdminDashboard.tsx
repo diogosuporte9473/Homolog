@@ -35,6 +35,7 @@ const contentTypes = {
   dicasEssenciais: { title: "Dicas Essenciais", icon: Lightbulb, endpoint: "/api/dicas-essenciais" },
   dicasRedesSociais: { title: "Dicas Redes Sociais", icon: Share2, endpoint: "/api/dicas-redes-sociais" },
   dicasPME: { title: "Dicas PMEs", icon: Building, endpoint: "/api/dicas-pme" },
+  dicasPaisEFilhos: { title: "Pais e Filhos", icon: Users, endpoint: "/api/dicas-pais-e-filhos" },
 };
 
 function ContentManager({ type }: { type: keyof typeof contentTypes }) {
@@ -314,7 +315,7 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs defaultValue="noticias" className="space-y-6">
-          <TabsList className="bg-card/50 border border-border/40 p-1 grid grid-cols-2 md:grid-cols-5 gap-1 h-auto">
+          <TabsList className="bg-card/50 border border-border/40 p-1 grid grid-cols-2 md:grid-cols-6 gap-1 h-auto">
             <TabsTrigger value="noticias" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Newspaper className="h-4 w-4 mr-2" /> Notícias
             </TabsTrigger>
@@ -327,151 +328,159 @@ export default function AdminDashboard() {
             <TabsTrigger value="dicasPME" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Building className="h-4 w-4 mr-2" /> Dicas PMEs
             </TabsTrigger>
-            <TabsTrigger value="users" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
-              <Users className="h-4 w-4 mr-2" /> Usuários
+            <TabsTrigger value="dicasPaisEFilhos" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+              <Users className="h-4 w-4 mr-2" /> Pais e Filhos
             </TabsTrigger>
+            {user?.role === 'admin' && (
+              <TabsTrigger value="users" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+                <Users className="h-4 w-4 mr-2" /> Usuários
+              </TabsTrigger>
+            )}
           </TabsList>
 
           <TabsContent value="noticias"><ContentManager type="noticias" /></TabsContent>
           <TabsContent value="dicasEssenciais"><ContentManager type="dicasEssenciais" /></TabsContent>
           <TabsContent value="dicasRedesSociais"><ContentManager type="dicasRedesSociais" /></TabsContent>
           <TabsContent value="dicasPME"><ContentManager type="dicasPME" /></TabsContent>
+          <TabsContent value="dicasPaisEFilhos"><ContentManager type="dicasPaisEFilhos" /></TabsContent>
 
-          <TabsContent value="users">
-            <Card className="border-border/40 bg-card/50 backdrop-blur-sm">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>Gerenciar Usuários</CardTitle>
-                  <CardDescription>Controle quem pode acessar e publicar no site</CardDescription>
-                </div>
-                <Dialog open={isUserModalOpen} onOpenChange={setIsUserModalOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="bg-blue-600 hover:bg-blue-700" onClick={() => openUserModal()}>
-                      <Plus className="h-4 w-4 mr-2" /> Novo Usuário
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px] bg-slate-900 border-slate-800 text-white">
-                    <DialogHeader>
-                      <DialogTitle>{selectedUser ? "Editar Usuário" : "Novo Usuário"}</DialogTitle>
-                      <DialogDescription className="text-slate-400">
-                        {selectedUser ? "Atualize as informações do usuário." : "Crie uma nova conta de acesso para o painel."}
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid gap-2">
-                        <Label htmlFor="username">Usuário</Label>
-                        <Input 
-                          id="username" 
-                          value={newUsername} 
-                          onChange={(e) => setNewUsername(e.target.value)}
-                          className="bg-slate-800 border-slate-700"
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="password">Senha {selectedUser && "(Deixe em branco para manter a atual)"}</Label>
-                        <div className="relative">
-                          <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+          {user?.role === 'admin' && (
+            <TabsContent value="users">
+              <Card className="border-border/40 bg-card/50 backdrop-blur-sm">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle>Gerenciar Usuários</CardTitle>
+                    <CardDescription>Controle quem pode acessar e publicar no site</CardDescription>
+                  </div>
+                  <Dialog open={isUserModalOpen} onOpenChange={setIsUserModalOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-blue-600 hover:bg-blue-700" onClick={() => openUserModal()}>
+                        <Plus className="h-4 w-4 mr-2" /> Novo Usuário
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px] bg-slate-900 border-slate-800 text-white">
+                      <DialogHeader>
+                        <DialogTitle>{selectedUser ? "Editar Usuário" : "Novo Usuário"}</DialogTitle>
+                        <DialogDescription className="text-slate-400">
+                          {selectedUser ? "Atualize as informações do usuário." : "Crie uma nova conta de acesso para o painel."}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                          <Label htmlFor="username">Usuário</Label>
                           <Input 
-                            id="password" 
-                            type="password"
-                            value={newPassword} 
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            className="bg-slate-800 border-slate-700 pl-10"
-                            placeholder={selectedUser ? "••••••••" : "Digite a senha"}
+                            id="username" 
+                            value={newUsername} 
+                            onChange={(e) => setNewUsername(e.target.value)}
+                            className="bg-slate-800 border-slate-700"
                           />
                         </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="password">Senha {selectedUser && "(Deixe em branco para manter a atual)"}</Label>
+                          <div className="relative">
+                            <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                            <Input 
+                              id="password" 
+                              type="password"
+                              value={newPassword} 
+                              onChange={(e) => setNewPassword(e.target.value)}
+                              className="bg-slate-800 border-slate-700 pl-10"
+                              placeholder={selectedUser ? "••••••••" : "Digite a senha"}
+                            />
+                          </div>
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="role">Papel</Label>
+                          <Select value={newRole} onValueChange={setNewRole}>
+                            <SelectTrigger className="bg-slate-800 border-slate-700">
+                              <SelectValue placeholder="Selecione o papel" />
+                            </SelectTrigger>
+                            <SelectContent className="bg-slate-800 border-slate-700 text-white">
+                              <SelectItem value="admin">Administrador</SelectItem>
+                              <SelectItem value="editor">Editor</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex items-center space-x-2 py-2">
+                          <Switch 
+                            id="can-publish" 
+                            checked={newCanPublish} 
+                            onCheckedChange={setNewCanPublish}
+                          />
+                          <Label htmlFor="can-publish">Pode publicar conteúdos?</Label>
+                        </div>
                       </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="role">Papel</Label>
-                        <Select value={newRole} onValueChange={setNewRole}>
-                          <SelectTrigger className="bg-slate-800 border-slate-700">
-                            <SelectValue placeholder="Selecione o papel" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-slate-800 border-slate-700 text-white">
-                            <SelectItem value="admin">Administrador</SelectItem>
-                            <SelectItem value="editor">Editor</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="flex items-center space-x-2 py-2">
-                        <Switch 
-                          id="can-publish" 
-                          checked={newCanPublish} 
-                          onCheckedChange={setNewCanPublish}
-                        />
-                        <Label htmlFor="can-publish">Pode publicar conteúdos?</Label>
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <Button variant="ghost" onClick={closeUserModal} className="text-slate-400">Cancelar</Button>
-                      <Button onClick={handleSaveUser} className="bg-blue-600 hover:bg-blue-700">
-                        {selectedUser ? "Salvar Alterações" : "Criar Usuário"}
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border border-border/40">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Usuário</TableHead>
-                        <TableHead>Papel</TableHead>
-                        <TableHead>Pode Publicar?</TableHead>
-                        <TableHead className="text-right">Ações</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {users.map((u) => (
-                        <TableRow key={u.id}>
-                          <TableCell className="font-medium">{u.username}</TableCell>
-                          <TableCell>
-                            <Badge variant="outline" className={`capitalize ${u.role === 'admin' ? 'border-blue-500 text-blue-400' : 'border-slate-500 text-slate-400'}`}>
-                              {u.role}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Switch 
-                                checked={u.canPublish} 
-                                onCheckedChange={() => toggleUserPublish(u.id, u.canPublish)}
-                                disabled={u.role === "admin" || user?.role !== 'admin'}
-                              />
-                              <span className="text-sm text-muted-foreground">
-                                {u.canPublish ? "Sim" : "Não"}
-                              </span>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
-                              <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                className="h-8 w-8 text-blue-400 hover:bg-blue-400/10"
-                                onClick={() => openUserModal(u)}
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                className="h-8 w-8 text-red-400 hover:bg-red-400/10"
-                                onClick={() => deleteUser(u.id)}
-                                disabled={u.id === user?.id}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
+                      <DialogFooter>
+                        <Button variant="ghost" onClick={closeUserModal} className="text-slate-400">Cancelar</Button>
+                        <Button onClick={handleSaveUser} className="bg-blue-600 hover:bg-blue-700">
+                          {selectedUser ? "Salvar Alterações" : "Criar Usuário"}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </CardHeader>
+                <CardContent>
+                  <div className="rounded-md border border-border/40">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Usuário</TableHead>
+                          <TableHead>Papel</TableHead>
+                          <TableHead>Pode Publicar?</TableHead>
+                          <TableHead className="text-right">Ações</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                      </TableHeader>
+                      <TableBody>
+                        {users.map((u) => (
+                          <TableRow key={u.id}>
+                            <TableCell className="font-medium">{u.username}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className={`capitalize ${u.role === 'admin' ? 'border-blue-500 text-blue-400' : 'border-slate-500 text-slate-400'}`}>
+                                {u.role}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Switch 
+                                  checked={u.canPublish} 
+                                  onCheckedChange={() => toggleUserPublish(u.id, u.canPublish)}
+                                  disabled={u.role === "admin" || user?.role !== 'admin'}
+                                />
+                                <span className="text-sm text-muted-foreground">
+                                  {u.canPublish ? "Sim" : "Não"}
+                                </span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-2">
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-8 w-8 text-blue-400 hover:bg-blue-400/10"
+                                  onClick={() => openUserModal(u)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-8 w-8 text-red-400 hover:bg-red-400/10"
+                                  onClick={() => deleteUser(u.id)}
+                                  disabled={u.id === user?.id}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
         </Tabs>
       </main>
     </div>

@@ -14,7 +14,7 @@ export default function PaisFilhos() {
   useEffect(() => {
     const fetchNoticias = async () => {
       try {
-        const response = await axios.get("/api/noticias");
+        const response = await axios.get("/api/dicas-pais-e-filhos");
         setNoticiasCarrossel(response.data);
       } catch (error) {
         console.error("Erro ao carregar notícias:", error);
