@@ -1,0 +1,80 @@
+{
+  "posts": [
+    {
+      "id": "loganything-vulnerability",
+      "categoria": "Vulnerabilidades",
+      "titulo": "Nova falha crítica no 'LogAnything' afeta milhões de servidores",
+      "data": "15 de Março de 2026",
+      "autor": "Redação DMS Security",
+      "fonte": "The Hacker News",
+      "imagem": "https://images.unsplash.com/photo-1544890225-2fde0e66ea9c?q=80&w=1935&auto=format&fit=crop",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "Uma vulnerabilidade de execução remota de código (RCE) de dia zero, apelidada de 'LogAnything', foi descoberta na biblioteca de logging mais utilizada no ecossistema Java e Node.js. A falha, catalogada como CVE-2026-12345, recebeu a pontuação máxima de 10.0 no CVSS."
+        },
+        {
+          "tipo": "subtitulo",
+          "texto": "Impacto e Riscos"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "A falha permite que atacantes não autenticados executem comandos arbitrários em servidores vulneráveis apenas enviando uma string formatada especificamente em logs de aplicação. Isso pode levar ao comprometimento total do sistema, roubo de dados e instalação de ransomware."
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            "Exposição total de bancos de dados",
+            "Movimentação lateral na rede interna",
+            "Interrupção de serviços críticos",
+            "Vazamento de chaves de API e segredos"
+          ]
+        },
+        {
+          "tipo": "alerta",
+          "texto": "Recomenda-se a atualização imediata para a versão 3.4.2 do LogAnything. Se a atualização não for possível, desative as substituições de mensagens de log via configurações de ambiente."
+        }
+      ]
+    },
+    {
+      "id": "cyberlions-ransomware",
+      "categoria": "Ataques",
+      "titulo": "Grupo 'CyberLions' utiliza IA para criar phishing personalizado",
+      "data": "12 de Março de 2026",
+      "autor": "Equipe de Inteligência",
+      "fonte": "BleepingComputer",
+      "imagem": "https://images.unsplash.com/photo-1593642532400-2682810df593?q=80&w=2069&auto=format&fit=crop",
+      "conteudo": [
+        {
+          "tipo": "paragrafo",
+          "texto": "O grupo de ransomware CyberLions está elevando o nível dos ataques de engenharia social. Utilizando modelos avançados de linguagem (LLMs), eles agora geram e-mails de phishing que imitam perfeitamente o tom de voz e o estilo de escrita de executivos reais."
+        },
+        {
+          "tipo": "subtitulo",
+          "texto": "Como o ataque funciona"
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "Os atacantes primeiro coletam dados públicos e vazados sobre a empresa alvo. A IA então processa essas informações para criar uma narrativa convincente, muitas vezes citando projetos internos reais ou eventos corporativos recentes."
+        },
+        {
+          "tipo": "paragrafo",
+          "texto": "O objetivo é induzir o funcionário a clicar em um link malicioso ou baixar um anexo 'urgente' que instala o payload do ransomware LionsGate."
+        },
+        {
+          "tipo": "dica",
+          "texto": "Sempre verifique solicitações de transferência de fundos ou envio de dados sensíveis por um segundo canal de comunicação (telefone ou chat interno)."
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "admin-1",
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin",
+      "canPublish": true
+    }
+  ]
+}
