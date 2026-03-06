@@ -120,6 +120,7 @@ app.use("/api/noticias", createCrudRoutes("noticias"));
 app.use("/api/dicas-essenciais", createCrudRoutes("dicasEssenciais"));
 app.use("/api/dicas-redes-sociais", createCrudRoutes("dicasRedesSociais"));
 app.use("/api/dicas-pme", createCrudRoutes("dicasPME"));
+app.use("/api/dicas-pais-e-filhos", createCrudRoutes("dicasPaisEFilhos"));
 
 // User Auth & Management
 app.post("/api/login", async (req, res) => {
