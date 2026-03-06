@@ -20,6 +20,9 @@ interface ContentBlock {
 
 export default function AdminContentForm() {
   const { id } = useParams();
+  const [location, setLocation] = useLocation();
+  const type = new URLSearchParams(window.location.search).get("type") || "noticias";
+  
   const isEditing = !!id;
   const [titulo, setTitulo] = useState("");
   const [categoria, setCategoria] = useState("Vulnerabilidades");
@@ -30,7 +33,6 @@ export default function AdminContentForm() {
   const [isLoading, setIsLoading] = useState(false);
   
   const { user, loading: authLoading } = useAuth();
-  const [, setLocation] = useLocation();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -45,11 +47,12 @@ export default function AdminContentForm() {
     if (isEditing) {
       fetchPost();
     }
-  }, [id]);
+  }, [id, type]);
 
   const fetchPost = async () => {
     try {
-      const response = await axios.get(`/api/posts/${id}`);
+      const endpoint = `/api/${type}/${id}`;
+      const response = await axios.get(endpoint);
       const post = response.data;
       setTitulo(post.titulo);
       setCategoria(post.categoria);
@@ -109,11 +112,12 @@ export default function AdminContentForm() {
     };
 
     try {
+      const endpoint = `/api/${type}`;
       if (isEditing) {
-        await axios.put(`/api/posts/${id}`, postData);
+        await axios.put(`${endpoint}/${id}`, postData);
         toast.success("Conteúdo atualizado com sucesso!");
       } else {
-        await axios.post("/api/posts", postData);
+        await axios.post(endpoint, postData);
         toast.success("Conteúdo criado com sucesso!");
       }
       setLocation("/admin");
@@ -134,7 +138,7 @@ export default function AdminContentForm() {
             <Button variant="ghost" size="icon" onClick={() => setLocation("/admin")}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="font-bold text-lg">{isEditing ? "Editar Conteúdo" : "Novo Conteúdo"}</h1>
+            <h1 className="font-bold text-lg">{isEditing ? "Editar" : "Novo"} {type.replace(/-/g, ' ')}</h1>
           </div>
           <Button onClick={handleSubmit} disabled={isLoading} className="bg-blue-600 hover:bg-blue-700">
             <Save className="h-4 w-4 mr-2" /> {isLoading ? "Salvando..." : "Salvar"}

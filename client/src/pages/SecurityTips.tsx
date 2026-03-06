@@ -13,7 +13,7 @@ export default function SecurityTips() {
   useEffect(() => {
     const fetchNoticias = async () => {
       try {
-        const response = await axios.get("/api/posts");
+        const response = await axios.get("/api/dicas-essenciais");
         // Filtrar apenas se a categoria for relevante ou mostrar todas
         setNoticiasCarrossel(response.data);
       } catch (error) {

@@ -13,7 +13,7 @@ export default function SocialMediaSecurity() {
   useEffect(() => {
     const fetchNoticias = async () => {
       try {
-        const response = await axios.get("/api/posts");
+        const response = await axios.get("/api/dicas-redes-sociais");
         setNoticiasCarrossel(response.data);
       } catch (error) {
         console.error("Erro ao carregar notícias:", error);

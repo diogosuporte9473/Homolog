@@ -35,7 +35,7 @@ export default function GuiaPME() {
   useEffect(() => {
     const fetchNoticias = async () => {
       try {
-        const response = await axios.get("/api/posts");
+        const response = await axios.get("/api/dicas-pme");
         setNoticiasCarrossel(response.data);
       } catch (error) {
         console.error("Erro ao carregar notícias:", error);

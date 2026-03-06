@@ -15,7 +15,7 @@ export default function NoticiaDetalhe() {
   useEffect(() => {
     const fetchNoticia = async () => {
       try {
-        const response = await axios.get(`/api/posts/${id}`);
+        const response = await axios.get(`/api/noticias/${id}`);
         setNoticia(response.data);
       } catch (error) {
         console.error("Erro ao carregar notícia:", error);
