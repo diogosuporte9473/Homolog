@@ -4,53 +4,25 @@ import { Shield, AlertCircle, Cloud, Brain, Users, CheckCircle2, Zap, Lock, Bell
 import PageLayout from "@/components/PageLayout";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function SegurancaTecnologia() {
-  const publicoAlvo = [
-    "Profissionais de TI e Segurança",
-    "CISOs, Gestores e Líderes",
-    "Analistas e Especialistas",
-    "Estudantes e Iniciantes",
-    "Desenvolvedores e SRE/DevOps",
-  ];
+  const [noticiasCarrossel, setNoticiasCarrossel] = useState<any[]>([]);
 
-  const noticiasCarrossel = [
-    {
-      id: "loganything-vulnerability",
-      categoria: "Vulnerabilidades",
-      titulo: "Nova falha crítica no 'LogAnything' afeta milhões de servidores",
-      fonte: "The Hacker News",
-      imagem: "https://images.unsplash.com/photo-1544890225-2fde0e66ea9c?q=80&w=1935&auto=format&fit=crop"
-    },
-    {
-      id: "cyberlions-ransomware",
-      categoria: "Ataques",
-      titulo: "Grupo de ransomware 'CyberLions' utiliza IA para criar phishing personalizado",
-      fonte: "BleepingComputer",
-      imagem: "https://images.unsplash.com/photo-1593642532400-2682810df593?q=80&w=2069&auto=format&fit=crop"
-    },
-    {
-      id: "anpd-fine-retail",
-      categoria: "LGPD",
-      titulo: "ANPD multa empresa de varejo por vazamento de dados de clientes",
-      fonte: "Gov.br/ANPD",
-      imagem: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2070&auto=format&fit=crop"
-    },
-    {
-      id: "microsoft-zero-trust",
-      categoria: "Tecnologia",
-      titulo: "Microsoft anuncia novas ferramentas de segurança baseadas em Zero Trust",
-      fonte: "Microsoft Security Blog",
-      imagem: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=1964&auto=format&fit=crop"
-    },
-    {
-      id: "cybersecurity-market-growth",
-      categoria: "Mercado",
-      titulo: "Demanda por profissionais de cibersegurança cresce 35% em 2024",
-      fonte: "Brasscom",
-      imagem: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
-    }
-  ];
+  useEffect(() => {
+    const fetchNoticias = async () => {
+      try {
+        const response = await axios.get("/api/posts");
+        setNoticiasCarrossel(response.data);
+      } catch (error) {
+        console.error("Erro ao carregar notícias:", error);
+      }
+    };
+    fetchNoticias();
+  }, []);
+
+  const publicoAlvo = [
 
   const noticiasRecentes = [
     {

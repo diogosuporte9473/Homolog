@@ -6,7 +6,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Inicio from "./pages/Inicio";
-import Intro from "./pages/Intro";
 import SecurityTips from "./pages/SecurityTips";
 import SocialMediaSecurity from "./pages/SocialMediaSecurity";
 import SegurancaTecnologia from "./pages/SegurancaTecnologia";
@@ -14,13 +13,15 @@ import PaisFilhos from "./pages/PaisFilhos";
 import JogoSI from "./pages/JogoSI";
 import GuiaPME from "./pages/GuiaPME";
 import NoticiaDetalhe from "./pages/NoticiaDetalhe";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminContentForm from "./pages/AdminContentForm";
 
 
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Intro} />
-      <Route path={"/inicio"} component={Inicio} />
+      <Route path={"/"} component={Inicio} />
       <Route path={"/sobre"} component={Home} />
       <Route path={"/dicas-seguranca"} component={SecurityTips} />
       <Route path={"/dicas-redes-sociais"} component={SocialMediaSecurity} />
@@ -29,6 +30,10 @@ function Router() {
       <Route path={"/pais-e-filhos"} component={PaisFilhos} />
       <Route path={"/jogo-si"} component={JogoSI} />
       <Route path={"/guia-pme"} component={GuiaPME} />
+      <Route path={"/admin/login"} component={AdminLogin} />
+      <Route path={"/admin"} component={AdminDashboard} />
+      <Route path={"/admin/content/new"} component={AdminContentForm} />
+      <Route path={"/admin/content/edit/:id"} component={AdminContentForm} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
