@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-import express from "express";
+import express, { Request, Response } from "express";
 import { nanoid } from "nanoid";
 
 const app = express();
@@ -50,7 +50,7 @@ async function saveDB(data: any) {
 function createCrudRoutes(resource: string) {
   const router = express.Router();
 
-  router.get(`/`, async (_req, res) => {
+  router.get(`/`, async (_req: Request, res: Response) => {
     try {
       const db = await getDB();
       res.json(db[resource]);
@@ -59,7 +59,7 @@ function createCrudRoutes(resource: string) {
     }
   });
 
-  router.get(`/:id`, async (req, res) => {
+  router.get(`/:id`, async (req: Request, res: Response) => {
     try {
       const db = await getDB();
       const item = db[resource].find((p: any) => p.id === req.params.id);
@@ -73,7 +73,7 @@ function createCrudRoutes(resource: string) {
     }
   });
 
-  router.post(`/`, async (req, res) => {
+  router.post(`/`, async (req: Request, res: Response) => {
     try {
       const db = await getDB();
       const newItem = { id: nanoid(), ...req.body };
@@ -85,7 +85,7 @@ function createCrudRoutes(resource: string) {
     }
   });
 
-  router.put(`/:id`, async (req, res) => {
+  router.put(`/:id`, async (req: Request, res: Response) => {
     try {
       const db = await getDB();
       const index = db[resource].findIndex((p: any) => p.id === req.params.id);
@@ -101,7 +101,7 @@ function createCrudRoutes(resource: string) {
     }
   });
 
-  router.delete(`/:id`, async (req, res) => {
+  router.delete(`/:id`, async (req: Request, res: Response) => {
     try {
       const db = await getDB();
       db[resource] = db[resource].filter((p: any) => p.id !== req.params.id);
@@ -123,7 +123,7 @@ app.use("/api/dicas-pme", createCrudRoutes("dicasPME"));
 app.use("/api/dicas-pais-e-filhos", createCrudRoutes("dicasPaisEFilhos"));
 
 // User Auth & Management
-app.post("/api/login", async (req, res) => {
+app.post("/api/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
   try {
     const db = await getDB();
@@ -139,7 +139,7 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-app.get("/api/users", async (_req, res) => {
+app.get("/api/users", async (_req: Request, res: Response) => {
   try {
     const db = await getDB();
     res.json(db.users.map(({ password, ...u }: any) => u));
@@ -148,7 +148,7 @@ app.get("/api/users", async (_req, res) => {
   }
 });
 
-app.post("/api/users", async (req, res) => {
+app.post("/api/users", async (req: Request, res: Response) => {
   try {
     const db = await getDB();
     const { username, password, role, canPublish } = req.body;
@@ -175,7 +175,7 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
-app.patch("/api/users/:id", async (req, res) => {
+app.patch("/api/users/:id", async (req: Request, res: Response) => {
   try {
     const db = await getDB();
     const index = db.users.findIndex((u: any) => u.id === req.params.id);
@@ -193,7 +193,7 @@ app.patch("/api/users/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/users/:id", async (req, res) => {
+app.delete("/api/users/:id", async (req: Request, res: Response) => {
   try {
     const db = await getDB();
     // Prevent deleting the last admin
