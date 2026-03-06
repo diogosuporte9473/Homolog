@@ -1,5 +1,5 @@
 {
-  "posts": [
+  "noticias": [
     {
       "id": "loganything-vulnerability",
       "categoria": "Vulnerabilidades",
@@ -68,6 +68,9 @@
       ]
     }
   ],
+  "dicasEssenciais": [],
+  "dicasRedesSociais": [],
+  "dicasPME": [],
   "users": [
     {
       "id": "admin-1",

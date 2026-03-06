@@ -46,68 +46,80 @@ async function saveDB(data: any) {
   await fs.writeFile(TMP_DB_PATH, JSON.stringify(data, null, 2), "utf-8");
 }
 
-// API Routes
-app.get("/api/posts", async (_req, res) => {
-  try {
-    const db = await getDB();
-    res.json(db.posts);
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao ler banco de dados" });
-  }
-});
+// Função genérica para criar rotas CRUD
+function createCrudRoutes(resource: string) {
+  const router = express.Router();
 
-app.get("/api/posts/:id", async (req, res) => {
-  try {
-    const db = await getDB();
-    const post = db.posts.find((p: any) => p.id === req.params.id);
-    if (post) {
-      res.json(post);
-    } else {
-      res.status(404).json({ error: "Post não encontrado" });
+  router.get(`/`, async (_req, res) => {
+    try {
+      const db = await getDB();
+      res.json(db[resource]);
+    } catch (error) {
+      res.status(500).json({ error: `Erro ao ler ${resource}` });
     }
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao ler banco de dados" });
-  }
-});
+  });
 
-app.post("/api/posts", async (req, res) => {
-  try {
-    const db = await getDB();
-    const newPost = { id: nanoid(), ...req.body };
-    db.posts.push(newPost);
-    await saveDB(db);
-    res.status(201).json(newPost);
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao salvar post" });
-  }
-});
+  router.get(`/:id`, async (req, res) => {
+    try {
+      const db = await getDB();
+      const item = db[resource].find((p: any) => p.id === req.params.id);
+      if (item) {
+        res.json(item);
+      } else {
+        res.status(404).json({ error: `${resource} não encontrado` });
+      }
+    } catch (error) {
+      res.status(500).json({ error: `Erro ao ler ${resource}` });
+    }
+  });
 
-app.put("/api/posts/:id", async (req, res) => {
-  try {
-    const db = await getDB();
-    const index = db.posts.findIndex((p: any) => p.id === req.params.id);
-    if (index !== -1) {
-      db.posts[index] = { ...db.posts[index], ...req.body };
+  router.post(`/`, async (req, res) => {
+    try {
+      const db = await getDB();
+      const newItem = { id: nanoid(), ...req.body };
+      db[resource].push(newItem);
       await saveDB(db);
-      res.json(db.posts[index]);
-    } else {
-      res.status(404).json({ error: "Post não encontrado" });
+      res.status(201).json(newItem);
+    } catch (error) {
+      res.status(500).json({ error: `Erro ao salvar ${resource}` });
     }
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao atualizar post" });
-  }
-});
+  });
 
-app.delete("/api/posts/:id", async (req, res) => {
-  try {
-    const db = await getDB();
-    db.posts = db.posts.filter((p: any) => p.id !== req.params.id);
-    await saveDB(db);
-    res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao excluir post" });
-  }
-});
+  router.put(`/:id`, async (req, res) => {
+    try {
+      const db = await getDB();
+      const index = db[resource].findIndex((p: any) => p.id === req.params.id);
+      if (index !== -1) {
+        db[resource][index] = { ...db[resource][index], ...req.body };
+        await saveDB(db);
+        res.json(db[resource][index]);
+      } else {
+        res.status(404).json({ error: `${resource} não encontrado` });
+      }
+    } catch (error) {
+      res.status(500).json({ error: `Erro ao atualizar ${resource}` });
+    }
+  });
+
+  router.delete(`/:id`, async (req, res) => {
+    try {
+      const db = await getDB();
+      db[resource] = db[resource].filter((p: any) => p.id !== req.params.id);
+      await saveDB(db);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: `Erro ao excluir ${resource}` });
+    }
+  });
+
+  return router;
+}
+
+// API Routes
+app.use("/api/noticias", createCrudRoutes("noticias"));
+app.use("/api/dicas-essenciais", createCrudRoutes("dicasEssenciais"));
+app.use("/api/dicas-redes-sociais", createCrudRoutes("dicasRedesSociais"));
+app.use("/api/dicas-pme", createCrudRoutes("dicasPME"));
 
 // User Auth & Management
 app.post("/api/login", async (req, res) => {
@@ -135,11 +147,39 @@ app.get("/api/users", async (_req, res) => {
   }
 });
 
+app.post("/api/users", async (req, res) => {
+  try {
+    const db = await getDB();
+    const { username, password, role, canPublish } = req.body;
+    
+    if (db.users.find((u: any) => u.username === username)) {
+      return res.status(400).json({ error: "Usuário já existe" });
+    }
+
+    const newUser = {
+      id: nanoid(),
+      username,
+      password,
+      role: role || "editor",
+      canPublish: canPublish ?? true
+    };
+
+    db.users.push(newUser);
+    await saveDB(db);
+    
+    const { password: _, ...userWithoutPassword } = newUser;
+    res.status(201).json(userWithoutPassword);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao criar usuário" });
+  }
+});
+
 app.patch("/api/users/:id", async (req, res) => {
   try {
     const db = await getDB();
     const index = db.users.findIndex((u: any) => u.id === req.params.id);
     if (index !== -1) {
+      // Only update fields provided in the body
       db.users[index] = { ...db.users[index], ...req.body };
       await saveDB(db);
       const { password, ...userWithoutPassword } = db.users[index];
@@ -149,6 +189,23 @@ app.patch("/api/users/:id", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "Erro ao atualizar usuário" });
+  }
+});
+
+app.delete("/api/users/:id", async (req, res) => {
+  try {
+    const db = await getDB();
+    // Prevent deleting the last admin
+    const userToDelete = db.users.find((u: any) => u.id === req.params.id);
+    if (userToDelete?.role === 'admin' && db.users.filter((u: any) => u.role === 'admin').length <= 1) {
+      return res.status(400).json({ error: "Não é possível excluir o último administrador" });
+    }
+
+    db.users = db.users.filter((u: any) => u.id !== req.params.id);
+    await saveDB(db);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao excluir usuário" });
   }
 });
 
