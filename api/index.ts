@@ -6,19 +6,44 @@ import { nanoid } from "nanoid";
 const app = express();
 app.use(express.json());
 
-// No ambiente Vercel, o caminho para o db.json precisa ser absoluto a partir da raiz do projeto
-const DB_PATH = path.resolve(process.cwd(), "server", "db.json");
+// Caminho para o db.json original (somente leitura no deploy)
+const SOURCE_DB_PATH = path.resolve(process.cwd(), "server", "db.json");
+// Caminho para a cópia gravável do db.json na pasta /tmp
+const TMP_DB_PATH = path.join("/tmp", "db.json");
+
+let isDbInitialized = false;
+
+// Função para garantir que o DB temporário exista
+async function ensureDbIsInitialized() {
+  if (isDbInitialized) return;
+
+  try {
+    // Tenta acessar o arquivo em /tmp. Se existir, está tudo pronto.
+    await fs.access(TMP_DB_PATH);
+    isDbInitialized = true;
+  } catch {
+    // Se não existir, copia o original para /tmp
+    try {
+      const initialData = await fs.readFile(SOURCE_DB_PATH, "utf-8");
+      await fs.writeFile(TMP_DB_PATH, initialData, "utf-8");
+      isDbInitialized = true;
+    } catch (copyError) {
+      console.error("Falha ao inicializar o banco de dados em /tmp:", copyError);
+      // Se a cópia falhar, lança um erro para que as operações não continuem
+      throw new Error("Não foi possível inicializar o banco de dados.");
+    }
+  }
+}
 
 async function getDB() {
-  const data = await fs.readFile(DB_PATH, "utf-8");
+  await ensureDbIsInitialized();
+  const data = await fs.readFile(TMP_DB_PATH, "utf-8");
   return JSON.parse(data);
 }
 
 async function saveDB(data: any) {
-  // Nota: Em Vercel Serverless, gravações no sistema de arquivos não são persistentes
-  // entre sessões diferentes, mas funcionarão para a sessão atual.
-  // Para persistência real, recomenda-se usar um banco de dados externo no futuro.
-  await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), "utf-8");
+  await ensureDbIsInitialized();
+  await fs.writeFile(TMP_DB_PATH, JSON.stringify(data, null, 2), "utf-8");
 }
 
 // API Routes
