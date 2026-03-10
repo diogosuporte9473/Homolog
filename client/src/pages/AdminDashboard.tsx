@@ -31,11 +31,11 @@ interface UserData {
 }
 
 const contentTypes = {
-  noticias: { title: "Notícias", icon: Newspaper, endpoint: "/api/noticias" },
-  dicasEssenciais: { title: "Dicas Essenciais", icon: Lightbulb, endpoint: "/api/dicas-essenciais" },
-  dicasRedesSociais: { title: "Dicas Redes Sociais", icon: Share2, endpoint: "/api/dicas-redes-sociais" },
-  dicasPME: { title: "Dicas PMEs", icon: Building, endpoint: "/api/dicas-pme" },
-  dicasPaisEFilhos: { title: "Pais e Filhos", icon: Users, endpoint: "/api/dicas-pais-e-filhos" },
+  "noticias": { title: "Notícias", icon: Newspaper, endpoint: "/api/noticias" },
+  "dicas-essenciais": { title: "Dicas Essenciais", icon: Lightbulb, endpoint: "/api/dicas-essenciais" },
+  "dicas-redes-sociais": { title: "Dicas Redes Sociais", icon: Share2, endpoint: "/api/dicas-redes-sociais" },
+  "dicas-pme": { title: "Dicas PMEs", icon: Building, endpoint: "/api/dicas-pme" },
+  "dicas-pais-e-filhos": { title: "Pais e Filhos", icon: Users, endpoint: "/api/dicas-pais-e-filhos" },
 };
 
 function ContentManager({ type }: { type: keyof typeof contentTypes }) {
@@ -319,16 +319,16 @@ export default function AdminDashboard() {
             <TabsTrigger value="noticias" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Newspaper className="h-4 w-4 mr-2" /> Notícias
             </TabsTrigger>
-            <TabsTrigger value="dicasEssenciais" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+            <TabsTrigger value="dicas-essenciais" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Lightbulb className="h-4 w-4 mr-2" /> Dicas Essenciais
             </TabsTrigger>
-            <TabsTrigger value="dicasRedesSociais" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+            <TabsTrigger value="dicas-redes-sociais" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Share2 className="h-4 w-4 mr-2" /> Redes Sociais
             </TabsTrigger>
-            <TabsTrigger value="dicasPME" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+            <TabsTrigger value="dicas-pme" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Building className="h-4 w-4 mr-2" /> Dicas PMEs
             </TabsTrigger>
-            <TabsTrigger value="dicasPaisEFilhos" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
+            <TabsTrigger value="dicas-pais-e-filhos" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">
               <Users className="h-4 w-4 mr-2" /> Pais e Filhos
             </TabsTrigger>
             {user?.role === 'admin' && (
@@ -339,10 +339,10 @@ export default function AdminDashboard() {
           </TabsList>
 
           <TabsContent value="noticias"><ContentManager type="noticias" /></TabsContent>
-          <TabsContent value="dicasEssenciais"><ContentManager type="dicasEssenciais" /></TabsContent>
-          <TabsContent value="dicasRedesSociais"><ContentManager type="dicasRedesSociais" /></TabsContent>
-          <TabsContent value="dicasPME"><ContentManager type="dicasPME" /></TabsContent>
-          <TabsContent value="dicasPaisEFilhos"><ContentManager type="dicasPaisEFilhos" /></TabsContent>
+          <TabsContent value="dicas-essenciais"><ContentManager type="dicas-essenciais" /></TabsContent>
+          <TabsContent value="dicas-redes-sociais"><ContentManager type="dicas-redes-sociais" /></TabsContent>
+          <TabsContent value="dicas-pme"><ContentManager type="dicas-pme" /></TabsContent>
+          <TabsContent value="dicas-pais-e-filhos"><ContentManager type="dicas-pais-e-filhos" /></TabsContent>
 
           {user?.role === 'admin' && (
             <TabsContent value="users">

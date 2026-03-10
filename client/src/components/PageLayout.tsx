@@ -6,25 +6,11 @@ interface PageLayoutProps {
 
 export default function PageLayout({ children }: PageLayoutProps) {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans relative">
+    <div className="min-h-screen bg-[#0F1419] text-slate-200 font-sans relative">
       {/* Background Video */}
       <div className="fixed inset-0 w-full h-full overflow-hidden z-0">
-        <iframe
-          src="https://player.vimeo.com/video/1169587272?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1&controls=0&playsinline=1&dnt=1&fl=ip&fe=ec"
-          className="w-full h-full object-cover"
-          allow="autoplay; fullscreen; picture-in-picture"
-          frameBorder="0"
-          title="DMS Security Background"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            pointerEvents: 'none',
-          }}
-        ></iframe>
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"></div>
+        <div className="w-full h-full object-cover bg-[#0F1419]" />
+        <div className="fixed inset-0 bg-[#0F1419]/80 backdrop-blur-sm"></div>
       </div>
 
       <div className="relative z-10 flex flex-col min-h-screen">
@@ -33,10 +19,22 @@ export default function PageLayout({ children }: PageLayoutProps) {
           {children}
         </main>
         <footer className="bg-transparent py-12">
-          <div className="container max-w-6xl mx-auto px-4 text-center border-t border-slate-800 pt-12">
-            <p className="text-slate-500 text-sm font-medium tracking-wide">
-              © 2025 Diogo Martins. Todos os direitos reservados. Integridade guia; mentira e vazamento destroem. (Provérbios 11:3).
-            </p>
+          <div className="container max-w-6xl mx-auto px-4 border-t border-slate-800 pt-12">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              <p className="text-slate-500 text-sm font-medium tracking-wide text-center md:text-left">
+                © 2025 Diogo Martins. Todos os direitos reservados. Integridade guia; mentira e vazamento destroem. (Provérbios 11:3).
+              </p>
+              <div className="flex justify-center md:justify-end">
+                <iframe 
+                  src="https://scores.securityscorecard.io/security-rating/badge/dmssecurity.com.br" 
+                  width="256" 
+                  height="100" 
+                  frameBorder="0"
+                  title="Security Scorecard Badge"
+                  className="rounded-lg bg-white/5 p-1"
+                ></iframe>
+              </div>
+            </div>
           </div>
         </footer>
       </div>

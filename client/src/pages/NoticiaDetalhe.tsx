@@ -15,15 +15,42 @@ export default function NoticiaDetalhe() {
   useEffect(() => {
     const fetchNoticia = async () => {
       try {
-        const response = await axios.get(`/api/noticias/${id}`);
-        setNoticia(response.data);
+        setLoading(true);
+        // Tentar primeiro em noticias
+        try {
+          const response = await axios.get(`/api/noticias/${id}`);
+          if (response.data) {
+            setNoticia(response.data);
+            return;
+          }
+        } catch (e) {}
+
+        // Se não achar, tentar em todas as outras categorias de dicas
+        const endpoints = [
+          "/api/dicas-essenciais",
+          "/api/dicas-redes-sociais",
+          "/api/dicas-pme",
+          "/api/dicas-pais-e-filhos"
+        ];
+
+        for (const endpoint of endpoints) {
+          try {
+            const response = await axios.get(`${endpoint}/${id}`);
+            if (response.data) {
+              setNoticia(response.data);
+              return;
+            }
+          } catch (e) {
+            continue;
+          }
+        }
       } catch (error) {
         console.error("Erro ao carregar notícia:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchNoticia();
+    if (id) fetchNoticia();
   }, [id]);
 
   if (loading) {

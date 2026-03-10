@@ -16,6 +16,7 @@ import NoticiaDetalhe from "./pages/NoticiaDetalhe";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminContentForm from "./pages/AdminContentForm";
+import Notes from "./pages/Notes";
 
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Inicio} />
       <Route path={"/sobre"} component={Home} />
+      <Route path={"/notes"} component={Notes} />
       <Route path={"/dicas-seguranca"} component={SecurityTips} />
       <Route path={"/dicas-redes-sociais"} component={SocialMediaSecurity} />
       <Route path={"/seguranca-tecnologia"} component={SegurancaTecnologia} />
@@ -50,7 +52,7 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider
-        defaultTheme="light"
+        defaultTheme="dark"
         // switchable
       >
         <TooltipProvider>
