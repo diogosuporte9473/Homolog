@@ -1,113 +1,104 @@
-import fs from "fs/promises";
-import path from "path";
 import express, { Request, Response } from "express";
+import { createClient } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
+import { randomUUID } from "crypto";
 
 const app = express();
 app.use(express.json());
 
-// Caminho para o db.json original (somente leitura no deploy)
-const SOURCE_DB_PATH = path.resolve(process.cwd(), "server", "db.json");
-// Caminho para a cópia gravável do db.json na pasta /tmp
-const TMP_DB_PATH = path.join("/tmp", "db.json");
+// Supabase configuration
+const supabaseUrl = process.env.SUPABASE_URL || "";
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || "";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-let isDbInitialized = false;
-
-// Função para garantir que o DB temporário exista
-async function ensureDbIsInitialized() {
-  if (isDbInitialized) return;
-
-  try {
-    // Tenta acessar o arquivo em /tmp. Se existir, está tudo pronto.
-    await fs.access(TMP_DB_PATH);
-    isDbInitialized = true;
-  } catch {
-    // Se não existir, copia o original para /tmp
-    try {
-      const initialData = await fs.readFile(SOURCE_DB_PATH, "utf-8");
-      await fs.writeFile(TMP_DB_PATH, initialData, "utf-8");
-      isDbInitialized = true;
-    } catch (copyError) {
-      console.error("Falha ao inicializar o banco de dados em /tmp:", copyError);
-      // Se a cópia falhar, lança um erro para que as operações não continuem
-      throw new Error("Não foi possível inicializar o banco de dados.");
-    }
-  }
-}
-
-async function getDB() {
-  await ensureDbIsInitialized();
-  const data = await fs.readFile(TMP_DB_PATH, "utf-8");
-  return JSON.parse(data);
-}
-
-async function saveDB(data: any) {
-  await ensureDbIsInitialized();
-  await fs.writeFile(TMP_DB_PATH, JSON.stringify(data, null, 2), "utf-8");
-}
-
-// Função genérica para criar rotas CRUD
-function createCrudRoutes(resource: string) {
+// Função genérica para criar rotas CRUD usando Supabase
+function createCrudRoutes(resource: string, table: string) {
   const router = express.Router();
 
-  router.get(`/`, async (_req: Request, res: Response) => {
+  router.get("/", async (_req: any, res: any) => {
     try {
-      const db = await getDB();
-      res.json(db[resource]);
-    } catch (error) {
-      res.status(500).json({ error: `Erro ao ler ${resource}` });
+      const { data, error } = await supabase.from(table).select("*").order('id', { ascending: false });
+
+      if (error) throw error;
+      res.json(data);
+    } catch (error: any) {
+      console.error(`Error reading ${resource}:`, error.message || error);
+      res.status(500).json({ error: `Erro ao ler ${resource}`, details: error.message });
     }
   });
 
-  router.get(`/:id`, async (req: Request, res: Response) => {
+  router.get("/:id", async (req: any, res: any) => {
     try {
-      const db = await getDB();
-      const item = db[resource].find((p: any) => p.id === req.params.id);
-      if (item) {
-        res.json(item);
+      const { data, error } = await supabase
+        .from(table)
+        .select("*")
+        .eq("id", req.params.id)
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        res.json(data);
       } else {
         res.status(404).json({ error: `${resource} não encontrado` });
       }
-    } catch (error) {
-      res.status(500).json({ error: `Erro ao ler ${resource}` });
+    } catch (error: any) {
+      console.error(`Error reading ${resource}:`, error.message || error);
+      res.status(500).json({ error: `Erro ao ler ${resource}`, details: error.message });
     }
   });
 
-  router.post(`/`, async (req: Request, res: Response) => {
-    try {
-      const db = await getDB();
-      const newItem = { id: nanoid(), ...req.body };
-      db[resource].push(newItem);
-      await saveDB(db);
-      res.status(201).json(newItem);
-    } catch (error) {
-      res.status(500).json({ error: `Erro ao salvar ${resource}` });
+  router.post("/", async (req: any, res: any) => {
+      try {
+        // Garante que temos um ID se não for auto-gerado pelo banco
+        // Preferimos randomUUID para compatibilidade com o tipo UUID do Supabase
+        const payload = { 
+          id: req.body.id || randomUUID(),
+          ...req.body 
+        };
+
+      const { data, error } = await supabase
+        .from(table)
+        .insert([payload])
+        .select()
+        .single();
+
+      if (error) throw error;
+      res.status(201).json(data);
+    } catch (error: any) {
+      console.error(`Error saving ${resource}:`, error.message || error);
+      res.status(500).json({ error: `Erro ao salvar ${resource}`, details: error.message });
     }
   });
 
-  router.put(`/:id`, async (req: Request, res: Response) => {
+  router.put("/:id", async (req: any, res: any) => {
     try {
-      const db = await getDB();
-      const index = db[resource].findIndex((p: any) => p.id === req.params.id);
-      if (index !== -1) {
-        db[resource][index] = { ...db[resource][index], ...req.body };
-        await saveDB(db);
-        res.json(db[resource][index]);
+      const { data, error } = await supabase
+        .from(table)
+        .update(req.body)
+        .eq("id", req.params.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        res.json(data);
       } else {
         res.status(404).json({ error: `${resource} não encontrado` });
       }
-    } catch (error) {
-      res.status(500).json({ error: `Erro ao atualizar ${resource}` });
+    } catch (error: any) {
+      console.error(`Error updating ${resource}:`, error.message || error);
+      res.status(500).json({ error: `Erro ao atualizar ${resource}`, details: error.message });
     }
   });
 
-  router.delete(`/:id`, async (req: Request, res: Response) => {
+  router.delete("/:id", async (req: any, res: any) => {
     try {
-      const db = await getDB();
-      db[resource] = db[resource].filter((p: any) => p.id !== req.params.id);
-      await saveDB(db);
+      const { error } = await supabase.from(table).delete().eq("id", req.params.id);
+
+      if (error) throw error;
       res.status(204).send();
     } catch (error) {
+      console.error(`Error deleting ${resource}:`, error);
       res.status(500).json({ error: `Erro ao excluir ${resource}` });
     }
   });
@@ -116,96 +107,139 @@ function createCrudRoutes(resource: string) {
 }
 
 // API Routes
-app.use("/api/noticias", createCrudRoutes("noticias"));
-app.use("/api/dicas-essenciais", createCrudRoutes("dicasEssenciais"));
-app.use("/api/dicas-redes-sociais", createCrudRoutes("dicasRedesSociais"));
-app.use("/api/dicas-pme", createCrudRoutes("dicasPME"));
-app.use("/api/dicas-pais-e-filhos", createCrudRoutes("dicasPaisEFilhos"));
+app.use("/api/noticias", createCrudRoutes("noticias", "noticias"));
+app.use("/api/dicas-essenciais", createCrudRoutes("dicas-essenciais", "dicas_essenciais"));
+app.use("/api/dicas-redes-sociais", createCrudRoutes("dicas-redes-sociais", "dicas_redes_sociais"));
+app.use("/api/dicas-pme", createCrudRoutes("dicas-pme", "dicas_pme"));
+app.use("/api/dicas-pais-e-filhos", createCrudRoutes("dicas-pais-e-filhos", "dicas_pais_filhos"));
+app.use("/api/notes", createCrudRoutes("notes", "notes"));
 
 // User Auth & Management
-app.post("/api/login", async (req: Request, res: Response) => {
+app.post("/api/login", async (req: any, res: any) => {
   const { username, password } = req.body;
   try {
-    const db = await getDB();
-    const user = db.users.find((u: any) => u.username === username && u.password === password);
+    const { data: user, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("username", username)
+      .eq("password", password)
+      .single();
+
     if (user) {
-      const { password, ...userWithoutPassword } = user;
+      const { password: _, ...userWithoutPassword } = user;
       res.json({ user: userWithoutPassword, token: "mock-token-" + nanoid() });
     } else {
       res.status(401).json({ error: "Credenciais inválidas" });
     }
-  } catch (error) {
-    res.status(500).json({ error: "Erro no servidor" });
+  } catch (error: any) {
+    console.error("Login error:", error.message || error);
+    res.status(500).json({ error: "Erro no servidor", details: error.message });
   }
 });
 
-app.get("/api/users", async (_req: Request, res: Response) => {
+app.get("/api/users", async (_req: any, res: any) => {
   try {
-    const db = await getDB();
-    res.json(db.users.map(({ password, ...u }: any) => u));
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao ler usuários" });
+    const { data: users, error } = await supabase
+      .from("users")
+      .select("id, username, role, canPublish");
+
+    if (error) throw error;
+    res.json(users);
+  } catch (error: any) {
+    console.error("Fetch users error:", error.message || error);
+    res.status(500).json({ error: "Erro ao ler usuários", details: error.message });
   }
 });
 
-app.post("/api/users", async (req: Request, res: Response) => {
+app.post("/api/users", async (req: any, res: any) => {
   try {
-    const db = await getDB();
     const { username, password, role, canPublish } = req.body;
-    
-    if (db.users.find((u: any) => u.username === username)) {
+
+    const { data: existingUser } = await supabase
+      .from("users")
+      .select("id")
+      .eq("username", username)
+      .maybeSingle();
+
+    if (existingUser) {
       return res.status(400).json({ error: "Usuário já existe" });
     }
 
     const newUser = {
-      id: nanoid(),
+      id: randomUUID(),
       username,
       password,
       role: role || "editor",
-      canPublish: canPublish ?? true
+      canPublish: canPublish ?? true,
     };
 
-    db.users.push(newUser);
-    await saveDB(db);
-    
-    const { password: _, ...userWithoutPassword } = newUser;
+    const { data, error } = await supabase
+      .from("users")
+      .insert([newUser])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const { password: _, ...userWithoutPassword } = data;
     res.status(201).json(userWithoutPassword);
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao criar usuário" });
+  } catch (error: any) {
+    console.error("Create user error:", error.message || error);
+    res.status(500).json({ error: "Erro ao criar usuário", details: error.message });
   }
 });
 
-app.patch("/api/users/:id", async (req: Request, res: Response) => {
+app.patch("/api/users/:id", async (req: any, res: any) => {
   try {
-    const db = await getDB();
-    const index = db.users.findIndex((u: any) => u.id === req.params.id);
-    if (index !== -1) {
-      // Only update fields provided in the body
-      db.users[index] = { ...db.users[index], ...req.body };
-      await saveDB(db);
-      const { password, ...userWithoutPassword } = db.users[index];
+    const { id } = req.params;
+    const { data, error } = await supabase
+      .from("users")
+      .update(req.body)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    if (data) {
+      const { password: _, ...userWithoutPassword } = data;
       res.json(userWithoutPassword);
     } else {
       res.status(404).json({ error: "Usuário não encontrado" });
     }
-  } catch (error) {
-    res.status(500).json({ error: "Erro ao atualizar usuário" });
+  } catch (error: any) {
+    console.error("Update user error:", error.message || error);
+    res.status(500).json({ error: "Erro ao atualizar usuário", details: error.message });
   }
 });
 
-app.delete("/api/users/:id", async (req: Request, res: Response) => {
+app.delete("/api/users/:id", async (req: any, res: any) => {
   try {
-    const db = await getDB();
+    const { id } = req.params;
+
     // Prevent deleting the last admin
-    const userToDelete = db.users.find((u: any) => u.id === req.params.id);
-    if (userToDelete?.role === 'admin' && db.users.filter((u: any) => u.role === 'admin').length <= 1) {
-      return res.status(400).json({ error: "Não é possível excluir o último administrador" });
+    const { data: userToDelete } = await supabase
+      .from("users")
+      .select("role")
+      .eq("id", id)
+      .single();
+
+    if (userToDelete?.role === "admin") {
+      const { count } = await supabase
+        .from("users")
+        .select("id", { count: "exact", head: true })
+        .eq("role", "admin");
+
+      if (count && count <= 1) {
+        return res.status(400).json({ error: "Não é possível excluir o último administrador" });
+      }
     }
 
-    db.users = db.users.filter((u: any) => u.id !== req.params.id);
-    await saveDB(db);
+    const { error } = await supabase.from("users").delete().eq("id", id);
+
+    if (error) throw error;
     res.status(204).send();
   } catch (error) {
+    console.error("Delete user error:", error);
     res.status(500).json({ error: "Erro ao excluir usuário" });
   }
 });
