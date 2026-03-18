@@ -20,20 +20,10 @@ export default function PageLayout({ children }: PageLayoutProps) {
         </main>
         <footer className="bg-transparent py-12">
           <div className="container max-w-6xl mx-auto px-4 border-t border-slate-800 pt-12">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-              <p className="text-slate-500 text-sm font-medium tracking-wide text-center md:text-left">
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-slate-500 text-sm font-medium tracking-wide text-center">
                 © 2025 Diogo Martins. Todos os direitos reservados. Integridade guia; mentira e vazamento destroem. (Provérbios 11:3).
               </p>
-              <div className="flex justify-center md:justify-end">
-                <iframe 
-                  src="https://scores.securityscorecard.io/security-rating/badge/dmssecurity.com.br" 
-                  width="256" 
-                  height="100" 
-                  frameBorder="0"
-                  title="Security Scorecard Badge"
-                  className="rounded-lg bg-white/5 p-1"
-                ></iframe>
-              </div>
             </div>
           </div>
         </footer>

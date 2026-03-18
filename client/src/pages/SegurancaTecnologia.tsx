@@ -13,7 +13,7 @@ export default function SegurancaTecnologia() {
   useEffect(() => {
     const fetchNoticias = async () => {
       try {
-        const response = await axios.get("/api/noticias");
+        const response = await axios.get("/api/news?q=tecnologia seguranca");
         setNoticiasCarrossel(response.data);
       } catch (error) {
         console.error("Erro ao carregar notícias:", error);
@@ -383,11 +383,9 @@ export default function SegurancaTecnologia() {
                         <h3 className="font-bold text-white mb-2 h-12">{noticia.titulo}</h3>
                         <div className="flex justify-between items-center">
                           <span className="text-xs text-slate-400">{noticia.fonte}</span>
-                          <Link href={`/noticia/${noticia.id}`}>
-                            <a className="text-blue-400 hover:text-blue-300 text-sm font-semibold">
-                              Ler mais
-                            </a>
-                          </Link>
+                          <a href={noticia.url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 text-sm font-semibold">
+                            Ler mais
+                          </a>
                         </div>
                       </div>
                     </Card>

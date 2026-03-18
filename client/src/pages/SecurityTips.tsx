@@ -13,7 +13,7 @@ export default function SecurityTips() {
   useEffect(() => {
     const fetchNoticias = async () => {
       try {
-        const response = await axios.get("/api/dicas-essenciais");
+        const response = await axios.get("/api/news?q=dicas seguranca online");
         // Filtrar apenas se a categoria for relevante ou mostrar todas
         setNoticiasCarrossel(response.data);
       } catch (error) {
@@ -264,11 +264,11 @@ export default function SecurityTips() {
                             </span>
                           </div>
                         </div>
-                        <Link href={`/noticia/${noticia.id}`}>
+                        <a href={noticia.url} target="_blank" rel="noopener noreferrer" className="w-full">
                           <Button variant="outline" size="sm" className="w-full border-blue-500/20 text-blue-400 hover:bg-blue-500/10 group/btn">
                             Ver Detalhes <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                           </Button>
-                        </Link>
+                        </a>
                       </div>
                     </Card>
                   </CarouselItem>
