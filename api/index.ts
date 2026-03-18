@@ -2,9 +2,90 @@ import express, { Request, Response } from "express";
 import { createClient } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import { randomUUID } from "crypto";
+import axios from "axios";
 
 const app = express();
 app.use(express.json());
+
+// Rota para buscar notícias da NewsAPI
+app.get("/api/news", async (req: Request, res: Response) => {
+  try {
+    const { NEWSAPI_KEY, GNEWS_API_KEY } = process.env;
+    
+    const query = req.query.q;
+    if (!query) {
+      return res.status(400).json({ error: "O parâmetro de busca 'q' é obrigatório." });
+    }
+
+    const language = req.query.language || "pt";
+    const pageSize = req.query.pageSize || "10";
+    const sortBy = req.query.sortBy || "publishedAt";
+
+    // Tentar usar GNews primeiro se a chave estiver disponível, pois costuma ser melhor para PT-BR
+    if (GNEWS_API_KEY) {
+      try {
+        const gnewsUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(query as string)}&lang=${language}&max=${pageSize}&apikey=${GNEWS_API_KEY}`;
+        const response = await axios.get(gnewsUrl);
+        
+        if (response.data.articles) {
+          const articles = response.data.articles.map((article: any) => ({
+            id: article.url,
+            titulo: article.title,
+            imagem: article.image || article.urlToImage || 'https://placehold.co/600x400/1e293b/white?text=DMS+Security',
+            categoria: article.source.name,
+            data: new Date(article.publishedAt).toLocaleDateString('pt-BR'),
+            resumo: article.description,
+            url: article.url,
+            fonte: article.source.name,
+          }));
+          return res.json(articles);
+        }
+      } catch (gnewsError: any) {
+        console.warn("GNews falhou, tentando NewsAPI:", gnewsError.message);
+      }
+    }
+
+    // Fallback para NewsAPI
+    if (!NEWSAPI_KEY) {
+      console.error("Nenhuma chave de API de notícias configurada.");
+      return res.status(500).json({ error: "Erro interno do servidor." });
+    }
+
+    const newsUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
+      query as string
+    )}&language=${language}&pageSize=${pageSize}&sortBy=${sortBy}&apiKey=${NEWSAPI_KEY}`;
+
+    const response = await axios.get(newsUrl);
+
+    if (response.data.status !== "ok") {
+      console.error("Erro da NewsAPI:", response.data.message);
+      return res.status(500).json({ error: response.data.message || "Erro na NewsAPI" });
+    }
+
+    // Mapear os dados para um formato consistente
+    const articles = response.data.articles.map((article: any) => ({
+      id: article.url, // Usar URL como ID único
+      titulo: article.title,
+      imagem: article.urlToImage || 'https://placehold.co/600x400/1e293b/white?text=DMS+Security',
+      categoria: article.source.name,
+      data: new Date(article.publishedAt).toLocaleDateString('pt-BR'),
+      resumo: article.description,
+      url: article.url,
+      fonte: article.source.name,
+    }));
+
+    res.json(articles);
+
+  } catch (error: any) {
+    if (error.response) {
+      console.error("Erro ao buscar notícias (resposta da API):", error.response.data);
+      res.status(error.response.status).json({ error: "Falha ao buscar notícias", details: error.response.data });
+    } else {
+      console.error("Erro ao buscar notícias:", error.message);
+      res.status(500).json({ error: "Falha ao buscar notícias", details: error.message });
+    }
+  }
+});
 
 // Supabase configuration
 const supabaseUrl = process.env.SUPABASE_URL || "";
